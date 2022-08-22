@@ -1,12 +1,6 @@
 package com.example.WaterCollect;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,7 +18,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import java.text.DecimalFormat;
-import java.util.Calendar;
 import java.util.Locale;
 
 /* 디버깅 해야될 것
@@ -37,8 +30,6 @@ import java.util.Locale;
 * */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main_Activity";
-
-    private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
 
     private ImageView ivMenu;
     private DrawerLayout drawerLayout;
@@ -93,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        button = findViewById(R.id.button3); // 입력
+        button = findViewById(R.id.button3);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,50 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(inputIntent);
             }
         });
-
-        // 현재 지정된 시간으로 알람 시간 설정
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 19);
-        calendar.set(Calendar.MINUTE, 22);
-        calendar.set(Calendar.SECOND, 0);
-
-        // 이미 지난 시간을 지정했다면 다음날 같은 시간으로 설정
-        if (calendar.before(Calendar.getInstance())) {
-            calendar.add(Calendar.DATE, 1);
-        }
-
-        diaryNotification(calendar);
-
     } // Oncreate() end
-
-    // 매일 특정 시간에 알림
-    void diaryNotification(Calendar calendar) {
-        PackageManager pm = this.getPackageManager();
-        ComponentName receiver = new ComponentName(this, DeviceBootReceiver.class);
-        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        if (alarmManager != null) {
-
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, pendingIntent);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            }
-        }
-
-        // 부팅 후 실행되는 리시버 사용가능하게 설정
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-
-    }
-
-    @Override
-    public void onBackPressed() { backKeyHandler.onBackPressed(); }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -155,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_main, menu);
         return true;
     }
-
     static String decimalChange(int s) { // 천단위로 콤마 붙이는 함수
         String number = Integer.toString(s);
         double amount = Double.parseDouble(number);
