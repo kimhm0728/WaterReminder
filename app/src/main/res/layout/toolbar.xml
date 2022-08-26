@@ -36,7 +36,8 @@
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            android:text="WaterCollect" />
+            android:text="Alarm" />
 
     </RelativeLayout>
 </androidx.appcompat.widget.Toolbar>
+
