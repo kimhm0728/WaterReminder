@@ -3,7 +3,6 @@ package com.example.WaterCollect;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -75,12 +74,12 @@ public class MainActivity extends AppCompatActivity {
         // 메뉴바 클릭 이벤트
 
         setSupportActionBar(toolbar);
-
+        Log.d(TAG, "onClick: 클릭됨");
         ivMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: 클릭됨");
-                drawerLayout.openDrawer(Gravity.LEFT);
+                //drawerLayout.openDrawer(Gravity.LEFT);
             }
         });
 
