@@ -11,13 +11,13 @@ public class start2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity2_intro);
+        setContentView(R.layout.activity2_main);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable(){
             @Override
             public void run(){
-                Intent intent=new Intent(getApplicationContext(), start.class);
+                Intent intent=new Intent(getApplicationContext(), inputActivity.class);
                 startActivity(intent);
                 finish();
             }
