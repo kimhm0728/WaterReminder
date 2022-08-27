@@ -52,14 +52,22 @@
         app:layout_constraintTop_toBottomOf="@+id/text1"/>
 
     <Button
+        android:id="@+id/button4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:rotationX="0"
+        android:text="알림"
+        app:layout_constraintStart_toStartOf="@+id/text1"
+        app:layout_constraintTop_toBottomOf="@+id/text1" />
+
+    <Button
         android:id="@+id/button3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteY="50dp"
-        app:layout_constraintStart_toStartOf="@+id/text1"
-        app:layout_constraintTop_toBottomOf="@+id/text1"
-        />
+        android:layout_marginTop="150dp"
+        android:text="입력"
+        app:layout_constraintBottom_toTopOf="@+id/drawer"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -78,12 +86,13 @@
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:context=".MainActivity"
+        tools:layout_editor_absoluteY="64dp">
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigation"
@@ -96,7 +105,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <include  layout="@layout/toolbar"/>
+
+            <include layout="@layout/toolbar" />
+
         </LinearLayout>
     </androidx.drawerlayout.widget.DrawerLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
