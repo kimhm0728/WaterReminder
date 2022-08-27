@@ -30,6 +30,8 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main_Activity";
 
+    private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
+
     private ImageView ivMenu;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
@@ -93,6 +95,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     } // Oncreate() end
+
+    @Override
+    public void onBackPressed() {
+        backKeyHandler.onBackPressed();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
