@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar pBar;
     private int weight = 0;
     private Button button;
-    private Button button1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,25 +103,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        button1 = findViewById(R.id.button4); // 알림
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 현재 지정된 시간으로 알람 시간 설정
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.set(Calendar.HOUR_OF_DAY, 19);
-                calendar.set(Calendar.MINUTE, 16);
-                calendar.set(Calendar.SECOND, 0);
+        // 현재 지정된 시간으로 알람 시간 설정
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 19);
+        calendar.set(Calendar.MINUTE, 22);
+        calendar.set(Calendar.SECOND, 0);
 
-                // 이미 지난 시간을 지정했다면 다음날 같은 시간으로 설정
-                if (calendar.before(Calendar.getInstance())) {
-                    calendar.add(Calendar.DATE, 1);
-                }
+        // 이미 지난 시간을 지정했다면 다음날 같은 시간으로 설정
+        if (calendar.before(Calendar.getInstance())) {
+            calendar.add(Calendar.DATE, 1);
+        }
 
-                diaryNotification(calendar);
-            }
-        });
+        diaryNotification(calendar);
+
     } // Oncreate() end
 
     // 매일 특정 시간에 알림
