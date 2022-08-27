@@ -52,15 +52,6 @@
         app:layout_constraintTop_toBottomOf="@+id/text1"/>
 
     <Button
-        android:id="@+id/button4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:rotationX="0"
-        android:text="알림"
-        app:layout_constraintStart_toStartOf="@+id/text1"
-        app:layout_constraintTop_toBottomOf="@+id/text1" />
-
-    <Button
         android:id="@+id/button3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
