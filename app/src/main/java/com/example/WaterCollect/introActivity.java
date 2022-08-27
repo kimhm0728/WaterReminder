@@ -6,12 +6,12 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class start2 extends AppCompatActivity {
+public class introActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity2_main);
+        setContentView(R.layout.activity_intro);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable(){
