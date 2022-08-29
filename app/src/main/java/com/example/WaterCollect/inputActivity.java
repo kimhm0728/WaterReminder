@@ -1,5 +1,6 @@
 package com.example.WaterCollect;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,41 +19,40 @@ public class inputActivity extends AppCompatActivity {
     private Button button2;
     private EditText edit;
     private TextView text;
-    private TextView text2;
+
+    private int weight = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
 
-        button = findViewById(R.id.button);
-        button2 = findViewById(R.id.button2);
         edit = findViewById(R.id.edit);
         text = findViewById(R.id.text);
-
         text.setText("");
 
+        button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int weight = Integer.parseInt(edit.getText().toString());
+                weight = Integer.parseInt(edit.getText().toString());
                 String day = Integer.toString(weight*30);
                 double amount = Double.parseDouble(day);
+
                 DecimalFormat formatter = new DecimalFormat("#,###");
                 String formatted = formatter.format(amount);
 
-                Intent intent = getIntent();
-                intent.putExtra("WEIGHT", 0);
                 text.setText(String.format(Locale.KOREA,"일일 섭취량은 %smL입니다.", formatted));
             }
         });
 
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("weight", weight);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
 }
