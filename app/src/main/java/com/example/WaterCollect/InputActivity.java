@@ -13,14 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.text.DecimalFormat;
 import java.util.Locale;
 
-public class inputActivity extends AppCompatActivity {
+public class InputActivity extends AppCompatActivity {
 
     private Button button;
-    private Button button2;
     private EditText edit;
     private TextView text;
-
-    private int weight = 0;
+    private String weight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +33,8 @@ public class inputActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                weight = Integer.parseInt(edit.getText().toString());
-                String day = Integer.toString(weight*30);
+                weight = edit.getText().toString();
+                String day = Integer.toString(Integer.parseInt(weight)*30);
                 double amount = Double.parseDouble(day);
 
                 DecimalFormat formatter = new DecimalFormat("#,###");
