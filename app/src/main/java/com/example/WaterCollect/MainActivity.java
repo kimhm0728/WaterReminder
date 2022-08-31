@@ -21,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -51,6 +52,7 @@ import java.util.UUID;
 4. 뒤로가기 눌렀을 때 메뉴 꺼지는 거
 
 * */
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main_Activity";
 
@@ -64,7 +66,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView text3;
     private ProgressBar pBar;
     private int weight = 0;
-    private Button button;
+    private TextView bt;
+    private TextView ip;
+    private TextView st;
+    private TextView se;
+    private ImageButton bluetooth;
+    private ImageButton input;
+    private ImageButton statistics;
+    private ImageButton setting;
 
     private static final int REQUEST_ENABLE_BT = 10; // 블루투스 활성화 상태
     private BluetoothAdapter bluetoothAdapter; // 블루투스 어댑터
@@ -87,6 +96,16 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
         };
+
+        bt = (TextView) findViewById(R.id.bt);
+        ip = (TextView) findViewById(R.id.ip);
+        st = (TextView) findViewById(R.id.st);
+        se = (TextView) findViewById(R.id.se);
+
+        bluetooth = (ImageButton) findViewById(R.id.bluetooth);
+        input = (ImageButton) findViewById(R.id.input);
+        statistics = (ImageButton) findViewById(R.id.statistics);
+        setting = (ImageButton) findViewById(R.id.setting);
 
         //블루투스 활성화 코드
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); //블루투스 어댑터를 디폴트 어댑터로 설정
@@ -157,21 +176,53 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        button = findViewById(R.id.button3); // 입력
-        button.setOnClickListener(new View.OnClickListener() {
+        input = findViewById(R.id.input); // 입력
+        input.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent inputIntent = new Intent(getApplicationContext(), inputActivity.class);
+                Intent inputIntent = new Intent(getApplicationContext(), InputActivity.class);
                 weight = inputIntent.getIntExtra("WEIGHT", 0);
                 startActivity(inputIntent);
             }
         });
 
+        bluetooth = findViewById(R.id.bluetooth); // 입력
+        bluetooth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent inputIntent = new Intent(getApplicationContext(), InputActivity.class);
+                weight = inputIntent.getIntExtra("WEIGHT", 0);
+                startActivity(inputIntent);
+            }
+        });
+
+        statistics = findViewById(R.id.statistics); // 입력
+        statistics.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent inputIntent = new Intent(getApplicationContext(), InputActivity.class);
+                weight = inputIntent.getIntExtra("WEIGHT", 0);
+                startActivity(inputIntent);
+            }
+        });
+
+        setting = findViewById(R.id.setting); // 입력
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent inputIntent = new Intent(getApplicationContext(), InputActivity.class);
+                weight = inputIntent.getIntExtra("WEIGHT", 0);
+                startActivity(inputIntent);
+            }
+        });
+
+
+
         // 현재 지정된 시간으로 알람 시간 설정
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 19);
-        calendar.set(Calendar.MINUTE, 22);
+        calendar.set(Calendar.HOUR_OF_DAY, 20);
+        calendar.set(Calendar.MINUTE, 35);
         calendar.set(Calendar.SECOND, 0);
 
         // 이미 지난 시간을 지정했다면 다음날 같은 시간으로 설정
