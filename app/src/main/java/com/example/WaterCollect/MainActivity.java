@@ -14,14 +14,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,9 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -47,27 +39,17 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
-/* 디버깅 해야될 것
-1. 메뉴 버튼 눌렀을 때 이벤트(지금은 드래그했을 때만 됨)
-2. 메뉴 각각 눌렀을 때 화면 넘어가는 거(구현은 다 했는데 안넘어감)
-아마 메뉴가 구현이 안되어서 그런듯
-3. weight 입력 안됐을 때 입력하라는 텍스트 안 나옴
-4. 뒤로가기 눌렀을 때 메뉴 꺼지는 거
-
-* */
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "Main_Activity";
-
     private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
 
-    private ImageView ivMenu;
-    private DrawerLayout drawerLayout;
-    private Toolbar toolbar;
-    private TextView text1;
-    private TextView text2;
-    private TextView text3;
-    private ProgressBar pBar;
-    private Button button;
+    private TextView total_text;
+    private TextView day_text;
+    private TextView left_text;
+    private ProgressBar ratio_pBar;
+    private ImageButton bluetooth_btn;
+    private ImageButton input_btn;
+    private ImageButton stat_btn;
+    private ImageButton set_btn;
 
     private int water = 100; // 무게센서 데이터
     private int waterSum = 0; // 총 섭취량
@@ -96,14 +78,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ivMenu = findViewById(R.id.iv_menu);
-        drawerLayout = findViewById(R.id.drawer);
-        toolbar = findViewById(R.id.toolbar);
-        text1 = findViewById(R.id.text1);
-        text2 = findViewById(R.id.text2);
-        text3 = findViewById(R.id.text3);
-        pBar = findViewById(R.id.progressBar);
-        button = findViewById(R.id.button3);
+        total_text = findViewById(R.id.water);
+        day_text = findViewById(R.id.day);
+        left_text = findViewById(R.id.left);
+        ratio_pBar = findViewById(R.id.water_pBar);
+        bluetooth_btn = findViewById(R.id.bluetooth_btn);
+        input_btn = findViewById(R.id.input_btn);
+        stat_btn = findViewById(R.id.statistics_btn);
+        set_btn = findViewById(R.id.setting_btn);
 
         //위치권한 허용 코드
         String[] permission_list = {
@@ -142,23 +124,35 @@ public class MainActivity extends AppCompatActivity {
 
         windowSet();
 
-        // 메뉴바 클릭 이벤트
-        setSupportActionBar(toolbar);
-
-        ivMenu.setOnClickListener(new View.OnClickListener() {
+        bluetooth_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: 클릭됨");
-                drawerLayout.openDrawer(Gravity.LEFT);
+                // dialog 띄우기
             }
         });
 
-        button.setOnClickListener(new View.OnClickListener() {
+        input_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 입력한 몸무게 데이터 받기
                 Intent inputIntent = new Intent(getApplicationContext(), InputActivity.class);
                 startActivityForResult(inputIntent, 101);
+            }
+        });
+
+        stat_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent statIntent = new Intent(this, StatActivity.class);
+                //startActivity(statIntent);
+            }
+        });
+
+        set_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent setIntent = new Intent(this, SetActivity.class);
+                //startActivity(setIntent);
             }
         });
 
@@ -176,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
         diaryNotification(calendar);
 
-    } // Oncreate() end
+    } // onCreate() end
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -394,15 +388,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() { backKeyHandler.onBackPressed(); }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.menu_main,menu);
-        //return false;
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
     public String decimalChange(int s) { // 천단위로 콤마 붙이는 함수
         String number = Integer.toString(s);
         double amount = Double.parseDouble(number);
@@ -412,36 +397,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void windowSet() {
-        text1.setText(String.format(Locale.KOREA, "오늘의 물 섭취량 %smL", decimalChange(waterSum)));
+        total_text.setText(String.format(Locale.KOREA, "오늘의 물 섭취량 %smL", decimalChange(waterSum)));
 
         if (weight == 0) {
-            text2.setText(String.format("몸무게를 입력해주세요"));
-            text3.setText(" ");
+            day_text.setText(String.format("몸무게를 입력해주세요"));
+            left_text.setText(" ");
         } else {
             ratio = (int) (((double) waterSum / day) * 100); // 권장량 달성비율
-            text2.setText(String.format(Locale.KOREA, "하루 권장량 %smL 중 %d%% 달성", decimalChange(day), ratio));
-            text3.setText(String.format(Locale.KOREA, "남은 섭취량 %smL", decimalChange(day - waterSum)));
+            day_text.setText(String.format(Locale.KOREA, "하루 권장량 %smL 중 %d%% 달성", decimalChange(day), ratio));
+            left_text.setText(String.format(Locale.KOREA, "남은 섭취량 %smL", decimalChange(day - waterSum)));
         }
 
-        pBar.setProgress(ratio); // 하루 권장량 달성비율만큼 progressBar에 적용
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.menu_input:
-                //Intent inputIntent = new Intent(this, InputActivity.class);
-                //weight = inputIntent.getIntExtra("WEIGHT",0);
-                //startActivity(inputIntent);
-                return true;
-            case R.id.menu_stat:
-                // 통계 보여주는 화면으로 이동
-                // Intent statIntent = new Intent(this, statActivity.class);
-                // startActivity(statIntent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        ratio_pBar.setProgress(50); // 하루 권장량 달성비율만큼 progressBar에 적용
     }
 }
