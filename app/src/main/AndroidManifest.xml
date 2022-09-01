@@ -63,6 +63,7 @@
         </receiver>
 
         <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".IntakeReceiver" />
 
     </application>
 
