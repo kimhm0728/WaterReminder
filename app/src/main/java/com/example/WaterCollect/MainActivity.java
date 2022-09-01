@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton bluetooth_btn;
     private ImageButton input_btn;
     private ImageButton stat_btn;
-    private ImageButton set_btn;
+    private ImageButton setting_btn;
 
     private int water = 100; // 무게센서 데이터
     private int waterSum = 0; // 총 섭취량
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         bluetooth_btn = findViewById(R.id.bluetooth_btn);
         input_btn = findViewById(R.id.input_btn);
         stat_btn = findViewById(R.id.statistics_btn);
-        set_btn = findViewById(R.id.setting_btn);
+        setting_btn = findViewById(R.id.setting_btn);
 
         //위치권한 허용 코드
         String[] permission_list = {
@@ -148,27 +148,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        set_btn.setOnClickListener(new View.OnClickListener() {
+        setting_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent setIntent = new Intent(this, SetActivity.class);
-                //startActivity(setIntent);
+               Intent setIntent = new Intent(getApplicationContext(), SetActivity.class);
+                startActivityForResult(setIntent, 101);
             }
         });
 
-        // 현재 지정된 시간으로 알람 시간 설정
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 19);
-        calendar.set(Calendar.MINUTE, 22);
-        calendar.set(Calendar.SECOND, 0);
-
-        // 이미 지난 시간을 지정했다면 다음날 같은 시간으로 설정
-        if (calendar.before(Calendar.getInstance())) {
-            calendar.add(Calendar.DATE, 1);
-        }
-
-        diaryNotification(calendar);
 
     } // onCreate() end
 
@@ -360,30 +347,6 @@ public class MainActivity extends AppCompatActivity {
         workerThread.start();
     }
 
-    // 매일 특정 시간에 알림
-    public void diaryNotification(Calendar calendar) {
-        PackageManager pm = this.getPackageManager();
-        ComponentName receiver = new ComponentName(this, DeviceBootReceiver.class);
-        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        if (alarmManager != null) {
-
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, pendingIntent);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            }
-        }
-
-        // 부팅 후 실행되는 리시버 사용가능하게 설정
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-
-    }
 
     @Override
     public void onBackPressed() { backKeyHandler.onBackPressed(); }
