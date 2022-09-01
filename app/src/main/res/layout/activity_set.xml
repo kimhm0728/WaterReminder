@@ -8,32 +8,18 @@
 
 
     <Switch
-        android:id="@+id/aSwitch"
+        android:id="@+id/alarmSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="236dp"
-        android:layout_marginTop="376dp"
+        android:layout_marginTop="388dp"
         android:minHeight="48dp"
         android:switchMinWidth="100dp"
         android:switchPadding="200dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ToggleButton
-        android:id="@+id/toggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="100dp"
-        android:minHeight="48dp"
-        android:textOff="off"
-        android:textOn="ON"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:ignore="MissingConstraints" />
-
-
 
     <ImageView
         android:id="@+id/imageView"
@@ -47,9 +33,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/on"/>
 
-
-
-
-
+    <TextView
+        android:id="@+id/alarmText"
+        android:layout_width="0dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="148dp"
+        android:minHeight="48dp"
+        android:text="off"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/alarmSwitch"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
