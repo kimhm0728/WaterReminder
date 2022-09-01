@@ -6,14 +6,13 @@ import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -42,20 +41,22 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
     private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
 
+    private TextView day_water;
     private TextView total_text;
     private TextView day_text;
     private TextView left_text;
+    private TextView percent;
     private ProgressBar ratio_pBar;
     private ImageButton bluetooth_btn;
     private ImageButton input_btn;
     private ImageButton stat_btn;
     private ImageButton setting_btn;
 
-    private int water = 100; // 무게센서 데이터
-    private int waterSum = 0; // 총 섭취량
-    private int day = 0; // 하루 권장 섭취량
-    private int ratio = 0; // 권장량 달성비율
-    private int weight = 0;
+    private static int water = 0; // 무게센서 데이터
+    public static int waterSum = 0; // 총 섭취량
+    private static int day = 0; // 하루 권장 섭취량
+    private static int ratio = 0; // 권장량 달성비율
+    private static int weight = 0;
 
     private static final int REQUEST_ENABLE_BT = 10; // 블루투스 활성화 상태
     private BluetoothAdapter bluetoothAdapter; // 블루투스 어댑터
@@ -67,8 +68,10 @@ public class MainActivity extends AppCompatActivity {
     private Thread workerThread = null; //문자열 수신에 사용되는 쓰레드
     private byte[] readBuffer; //수신된 문자열 저장 버퍼
     private int readBufferPosition; //버퍼  내 문자 저장 위치
-    int pairedDeviceCount;  //페어링 된 기기의 크기를 지정할 변수
-    boolean connect_status;
+    private int pairedDeviceCount;  //페어링 된 기기의 크기를 지정할 변수
+    private boolean connect_status;
+    private int bluetoothCheck = 3;
+    // 0: 블루투스 미지원 1: 블루투스 off 2: 블루투스 on, 연결필요 3: 연결완료
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("message");
@@ -78,9 +81,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        day_water = findViewById(R.id.dayText);
         total_text = findViewById(R.id.water);
         day_text = findViewById(R.id.day);
         left_text = findViewById(R.id.left);
+        percent = findViewById(R.id.percent);
         ratio_pBar = findViewById(R.id.water_pBar);
         bluetooth_btn = findViewById(R.id.bluetooth_btn);
         input_btn = findViewById(R.id.input_btn);
@@ -97,13 +102,15 @@ public class MainActivity extends AppCompatActivity {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); //블루투스 어댑터를 디폴트 어댑터로 설정
 
         if (bluetoothAdapter == null) { //기기가 블루투스를 지원하지 않을때
+            bluetoothCheck = 0;
             Toast.makeText(getApplicationContext(), "Bluetooth 미지원 기기입니다.", Toast.LENGTH_SHORT).show();
-            //처리코드 작성
         } else { // 기기가 블루투스를 지원할 때
             if (bluetoothAdapter.isEnabled()) { // 기기의 블루투스 기능이 켜져있을 경우
-                selectBluetoothDevice(); // 블루투스 디바이스 선택 함수 호출
+                bluetoothCheck = 2;
+                windowSet();
             } else { // 기기의 블루투스 기능이 꺼져있을 경우
-                // 블루투스를 활성화 하기 위한 대화상자 출력
+                bluetoothCheck = 1;
+                windowSet();
                 Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 // 선택 값이 onActivityResult 함수에서 콜백
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
@@ -122,12 +129,24 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        resetAlarm(this);
         windowSet();
 
         bluetooth_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // dialog 띄우기
+                switch (bluetoothCheck){
+                    case 0:
+                        Toast.makeText(getApplicationContext(), "Bluetooth 미지원 기기입니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                        Toast.makeText(getApplicationContext(), "휴대폰의 Bluetooth 기능을 켠 후 페어링할 장치를 선택해주세요.", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2:
+                    case 3:
+                        selectBluetoothDevice();
+                        break;
+                }
             }
         });
 
@@ -152,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                Intent setIntent = new Intent(getApplicationContext(), SetActivity.class);
-                startActivityForResult(setIntent, 101);
+               startActivity(setIntent);
             }
         });
 
@@ -163,12 +182,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // 액티비티에서 빠져나올 때 실행됨
-        if(requestCode == 101){
+        Toast.makeText(getApplicationContext(), "test", Toast.LENGTH_SHORT).show();
+        if(requestCode == 101 && !TextUtils.isEmpty(data.getStringExtra("weight"))) {
+            // 액티비티에서 받은 값이 있는 경우
             weight = Integer.parseInt(data.getStringExtra("weight"));
             day = weight * 30;
-            windowSet();
-            Toast.makeText(getApplicationContext(), "Message from InputActivity: " + weight, Toast.LENGTH_SHORT).show();
         }
+        else { } // 액티비티에서 받은 값이 없는 경우
+        windowSet();
     }
 
     public void selectBluetoothDevice() {
@@ -188,12 +209,14 @@ public class MainActivity extends AppCompatActivity {
         pairedDeviceCount = devices.size();
         //페어링 된 장치가 없는 경우
         if (pairedDeviceCount == 0) {
+            bluetoothCheck = 2;
+            windowSet();
             //페어링 하기 위한 함수 호출
-            Toast.makeText(getApplicationContext(), "먼저 Bluetooth 설정에 들어가 페어링을 진행해 주세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "페어링 되어있는 장치가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
         }
         //페어링 되어있는 장치가 있는 경우
         else {
-            //디바이스를 선택하기 위한 대화상자 생성
+            // 디바이스를 선택하기 위한 대화상자 생성
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("페어링 된 블루투스 디바이스 목록");
             //페어링 된 각각의 디바이스의 이름과 주소를 저장
@@ -222,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
             builder.setItems(charSequences, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    bluetoothCheck = 3;
                     //해당 디바이스와 연결하는 함수 호출
                     connectDevice(charSequences[which].toString());
                 }
@@ -315,11 +339,11 @@ public class MainActivity extends AppCompatActivity {
                                     final String waterStr = new String(encodedBytes, "UTF-8");
                                     // 다시 int로 변환
                                     water = Integer.parseInt(waterStr);
-                                    waterSum += water;
                                     readBufferPosition = 0;
                                     handler.post(new Runnable() {
                                         @Override
                                         public void run() {
+                                            waterSum += water;
                                             windowSet();
                                             // 받은 센서 값을 database에 전송
                                             myRef.setValue(Integer.toString(waterSum));
@@ -347,7 +371,6 @@ public class MainActivity extends AppCompatActivity {
         workerThread.start();
     }
 
-
     @Override
     public void onBackPressed() { backKeyHandler.onBackPressed(); }
 
@@ -360,17 +383,48 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void windowSet() {
-        total_text.setText(String.format(Locale.KOREA, "오늘의 물 섭취량 %smL", decimalChange(waterSum)));
+        total_text.setText(String.format(Locale.KOREA, "%smL", decimalChange(waterSum)));
 
+        switch(bluetoothCheck) {
+            case 1:
+                day_water.setText(String.format("블루투스 기능을"));
+                day_text.setText("켜주세요");
+                return;
+            case 2:
+                day_water.setText(String.format("아래의 블루투스 버튼을"));
+                day_text.setText("클릭하여 장치와 연결해주세요");
+                return;
+        }
         if (weight == 0) {
-            day_text.setText(String.format("몸무게를 입력해주세요"));
-            left_text.setText(" ");
+            day_water.setText(String.format("몸무게를"));
+            day_text.setText("입력해주세요");
         } else {
+            day_water.setText(String.format("하루 권장량"));
             ratio = (int) (((double) waterSum / day) * 100); // 권장량 달성비율
-            day_text.setText(String.format(Locale.KOREA, "하루 권장량 %smL 중 %d%% 달성", decimalChange(day), ratio));
-            left_text.setText(String.format(Locale.KOREA, "남은 섭취량 %smL", decimalChange(day - waterSum)));
+            percent.setText(String.format(Locale.KOREA, "%d%%", ratio));
+            day_text.setText(String.format(Locale.KOREA, "%smL", decimalChange(day)));
+            left_text.setText(String.format(Locale.KOREA, "%smL", decimalChange(day - waterSum)));
         }
 
         ratio_pBar.setProgress(50); // 하루 권장량 달성비율만큼 progressBar에 적용
     }
+
+    public void resetAlarm(Context context) {
+        // 자정이 되면 물 섭취량을 0으로 다시 초기화
+        AlarmManager resetAlarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent resetIntent = new Intent(context, IntakeReceiver.class);
+        PendingIntent resetSender = PendingIntent.getBroadcast(context, 0, resetIntent, 0);
+
+        // 자정 시간
+        Calendar resetCal = Calendar.getInstance();
+        resetCal.setTimeInMillis(System.currentTimeMillis());
+        resetCal.set(Calendar.HOUR_OF_DAY, 0);
+        resetCal.set(Calendar.MINUTE, 0);
+        resetCal.set(Calendar.SECOND, 0);
+
+        //다음날 0시에 맞추기 위해 24시간을 뜻하는 상수인 AlarmManager.INTERVAL_DAY를 더해줌.
+        resetAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, resetCal.getTimeInMillis()
+                +AlarmManager.INTERVAL_DAY, AlarmManager.INTERVAL_DAY, resetSender);
+    }
+
 }
