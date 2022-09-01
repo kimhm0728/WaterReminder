@@ -4,19 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
     android:background="@drawable/gradient_main"
-    >
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="76dp"
+        android:fontFamily="@font/nanumsquareextrabold"
+        android:gravity="center_horizontal"
+        android:includeFontPadding="false"
+        android:text="0%"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/water_pBar"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ProgressBar
         android:id="@+id/water_pBar"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="201dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="112dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="204dp"
         android:gravity="center_horizontal"
-        android:progressTint="#325e7f"
         android:max="100"
+        android:progressBackgroundTint="#000000"
+        android:progressTint="#ffffff"
         android:rotation="270"
         android:scaleY="25"
         android:textAlignment="center"
@@ -24,50 +42,95 @@
         app:layout_constraintStart_toStartOf="@+id/water" />
 
     <TextView
-        android:id="@+id/water"
+        android:id="@+id/waterText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
+        android:layout_marginStart="76dp"
+        android:fontFamily="@font/nanumsquareextrabold"
         android:gravity="center_horizontal"
+        android:includeFontPadding="false"
         android:text="@string/string1"
         android:textAlignment="center"
+        android:textColor="#ffffff"
         android:textSize="16sp"
-        android:fontFamily="@font/nanumsquareextrabold"
-        android:includeFontPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.592" />
+        app:layout_constraintVertical_bias="0.678" />
 
     <TextView
-        android:id="@+id/day"
+        android:id="@+id/water"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/nanumsquareextrabold"
+        android:text="0mL"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/waterText"
+        app:layout_constraintTop_toBottomOf="@+id/waterText" />
+
+
+    <TextView
+        android:id="@+id/dayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
         android:fontFamily="@font/nanumsquareextrabold"
         android:gravity="center_horizontal"
         android:includeFontPadding="false"
         android:text="@string/string2"
         android:textAlignment="center"
+        android:textColor="#ffffff"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/water"
-        app:layout_constraintTop_toBottomOf="@+id/water" />
+        app:layout_constraintStart_toStartOf="@id/water_pBar"
+        app:layout_constraintTop_toTopOf="@+id/percent" />
 
     <TextView
-        android:id="@+id/left"
+        android:id="@+id/day"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/nanumsquareextrabold"
+        android:text="0mL"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/dayText"
+        app:layout_constraintTop_toBottomOf="@+id/dayText" />
+
+    <TextView
+        android:id="@+id/leftText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginStart="140dp"
         android:fontFamily="@font/nanumsquareextrabold"
         android:gravity="center_horizontal"
         android:includeFontPadding="false"
         android:text="@string/string3"
         android:textAlignment="center"
+        android:textColor="#ffffff"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/water"
-        app:layout_constraintTop_toBottomOf="@+id/water" />
+        app:layout_constraintStart_toEndOf="@+id/waterText"
+        app:layout_constraintTop_toTopOf="@+id/waterText" />
+
+    <TextView
+        android:id="@+id/left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0mL"
+        android:layout_marginTop="15dp"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        tools:layout_editor_absoluteX="376dp"
+        tools:layout_editor_absoluteY="590dp"
+        app:layout_constraintEnd_toEndOf="@+id/leftText"
+        app:layout_constraintTop_toBottomOf="@+id/leftText"/>
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
