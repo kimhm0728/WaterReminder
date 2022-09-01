@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InputActivity">
+    tools:context=".InputActivity"
+    android:background="@drawable/gradient_main">
 
     <Button
         android:id="@+id/button"
@@ -14,7 +15,8 @@
         android:text="입력"
         android:textAlignment="center"
         app:layout_constraintBaseline_toBaselineOf="@+id/edit"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:fontFamily="@font/nanumsquareextrabold"/>
 
     <TextView
         android:id="@+id/text"
@@ -26,15 +28,18 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit" />
+        app:layout_constraintTop_toBottomOf="@+id/edit"
+        android:fontFamily="@font/nanumsquareextrabold"/>
+
 
     <EditText
         android:id="@+id/edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="47dp"
-        android:layout_marginTop="253dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="244dp"
         android:contentDescription="몸무게 입력"
+        android:hint="몸무게를 입력하세요"
         android:ems="10"
         android:gravity="center_horizontal"
         android:inputType="number"
@@ -44,28 +49,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="96dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center_horizontal"
-        android:text="나가기"
-        android:textAlignment="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit" />
-
-    <TextView
-        android:id="@+id/text2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="132dp"
-        android:layout_marginEnd="128dp"
-        android:gravity="center_horizontal"
-        android:text="몸무게를 입력해주세요"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
