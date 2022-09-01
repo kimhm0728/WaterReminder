@@ -21,7 +21,6 @@ import java.util.Calendar;
 public class SetActivity extends AppCompatActivity {
 
     ImageView imageView;
-    ImageView imageView2;
     ToggleButton toggleButton;
     Switch aSwitch;
 
@@ -29,25 +28,10 @@ public class SetActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // 현재 지정된 시간으로 알람 시간 설정
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 19);
-        calendar.set(Calendar.MINUTE, 22);
-        calendar.set(Calendar.SECOND, 0);
-
-        // 이미 지난 시간을 지정했다면 다음날 같은 시간으로 설정
-        if (calendar.before(Calendar.getInstance())) {
-            calendar.add(Calendar.DATE, 1);
-        }
-
-        diaryNotification(calendar);
+        setContentView(R.layout.activity_set);
 
 
         imageView = (ImageView) findViewById(R.id.imageView);
-        imageView2 = (ImageView) findViewById(R.id.imageView2);
 //        imageView = new ImageView(this);
 
         toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
@@ -63,10 +47,25 @@ public class SetActivity extends AppCompatActivity {
                     imageView.setImageResource(R.drawable.on);
                     //스위치를 on
                     aSwitch.setChecked(true);
+
+                    // 현재 지정된 시간으로 알람 시간 설정
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(System.currentTimeMillis());
+                    calendar.set(Calendar.HOUR_OF_DAY, 17);
+                    calendar.set(Calendar.MINUTE, 46);
+                    calendar.set(Calendar.SECOND, 0);
+
+                    // 이미 지난 시간을 지정했다면 다음날 같은 시간으로 설정
+                    if (calendar.before(Calendar.getInstance())) {
+                        calendar.add(Calendar.DATE, 1);
+                    }
+
+                    diaryNotification(calendar);
+
                 } else {
                     Toast.makeText(SetActivity.this, "토글클릭-OFF", Toast.LENGTH_SHORT).show();
                     //이미지를 교체
-                    imageView2.setImageResource(R.drawable.off);
+                    imageView.setImageResource(R.drawable.off);
                     //스위치를 Off
                     aSwitch.setChecked(false);
                 }
@@ -88,14 +87,13 @@ public class SetActivity extends AppCompatActivity {
 
                 } else {
                     Toast.makeText(SetActivity.this, "스위치-OFF", Toast.LENGTH_SHORT).show();
-                    imageView2.setImageResource(R.drawable.off);
+                    imageView.setImageResource(R.drawable.off);
                     toggleButton.setChecked(false);
                 }
             }
         });
 
     }
-
     // 매일 특정 시간에 알림
     void diaryNotification(Calendar calendar) {
         PackageManager pm = this.getPackageManager();
@@ -120,4 +118,5 @@ public class SetActivity extends AppCompatActivity {
                 PackageManager.DONT_KILL_APP);
 
     }
+
 }
