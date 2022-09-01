@@ -30,7 +30,9 @@ public class InputActivity extends AppCompatActivity {
         text.setText("");
 
         button = findViewById(R.id.button);
+
         button.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 weight = edit.getText().toString();
