@@ -33,7 +33,7 @@
         android:layout_marginBottom="204dp"
         android:gravity="center_horizontal"
         android:max="100"
-        android:progressBackgroundTint="#000000"
+        android:progressBackgroundTint="#ffffff"
         android:progressTint="#ffffff"
         android:rotation="270"
         android:scaleY="25"
@@ -170,7 +170,7 @@
                 android:includeFontPadding="false"
                 android:text="블루투스"
                 android:textColor="#80000000"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
 
@@ -188,7 +188,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:background="@drawable/weight"
-                android:contentDescription="몸무게 입력"
+                android:contentDescription="몸무게"
                 android:text="input" />
 
             <TextView
@@ -198,9 +198,9 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/nanumsquareextrabold"
                 android:includeFontPadding="false"
-                android:text="몸무게 입력"
+                android:text="몸무게"
                 android:textColor="#80000000"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -230,7 +230,7 @@
                 android:includeFontPadding="false"
                 android:text="통계"
                 android:textColor="#80000000"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -247,7 +247,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:background="@drawable/setting"
-                android:contentDescription="환경설정"
+                android:contentDescription="알림"
                 android:text="statistics" />
 
             <TextView
@@ -257,9 +257,9 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/nanumsquareextrabold"
                 android:includeFontPadding="false"
-                android:text="환경설정"
+                android:text="알림"
                 android:textColor="#80000000"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
     </LinearLayout>

@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -22,8 +24,12 @@ import java.util.Calendar;
 public class SetActivity extends AppCompatActivity {
 
     private ImageView alarmImage;
+    private ImageView aiImage;
     private TextView alarmText;
+    private TextView aiText;
     private Switch alarmSwitch;
+    private Switch aiSwitch;
+    private ImageButton xBtn;
 
     private PackageManager pm;
     private ComponentName receiver;
@@ -42,9 +48,13 @@ public class SetActivity extends AppCompatActivity {
         pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        alarmImage = (ImageView) findViewById(R.id.imageView);
+        alarmImage = (ImageView) findViewById(R.id.alarmImage);
         alarmText = (TextView) findViewById(R.id.alarmText);
         alarmSwitch = (Switch) findViewById(R.id.alarmSwitch);
+        aiImage = (ImageView) findViewById(R.id.aiImage);
+        aiText = (TextView) findViewById(R.id.aiText);
+        aiSwitch = (Switch) findViewById(R.id.aiSwitch);
+        xBtn = (ImageButton) findViewById(R.id.x_btn);
 
         //스위치 클릭 이벤트
         alarmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -53,7 +63,7 @@ public class SetActivity extends AppCompatActivity {
                 if (isChecked == true) {
                     Toast.makeText(SetActivity.this, "알림이 설정되었습니다.", Toast.LENGTH_SHORT).show();
                     alarmImage.setImageResource(R.drawable.on);
-                    alarmText.setText("on");
+                    alarmText.setText("정기 알림 on");
 
                     // 현재 지정된 시간으로 알람 시간 설정
                     Calendar calendar = Calendar.getInstance();
@@ -71,9 +81,8 @@ public class SetActivity extends AppCompatActivity {
 
                 } else {
                     Toast.makeText(SetActivity.this, "알림이 해제되었습니다.", Toast.LENGTH_SHORT).show();
-
                     alarmImage.setImageResource(R.drawable.off);
-                    alarmText.setText("off");
+                    alarmText.setText("정기 알림 off");
 
                     // 모든 알림 삭제
                     if (PendingIntent.getBroadcast(SetActivity.this, 0, alarmIntent, 0) != null && alarmManager != null) {
@@ -84,6 +93,34 @@ public class SetActivity extends AppCompatActivity {
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                             PackageManager.DONT_KILL_APP);
                 }
+            }
+        });
+
+        //스위치 클릭 이벤트
+        aiSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked == true) {
+                    Toast.makeText(SetActivity.this, "알림이 설정되었습니다.", Toast.LENGTH_SHORT).show();
+                    aiImage.setImageResource(R.drawable.on);
+                    aiText.setText("인공지능 알림 on");
+
+                    // 인공지능 관련 기능 추가
+                }
+                else {
+                    Toast.makeText(SetActivity.this, "알림이 해제되었습니다.", Toast.LENGTH_SHORT).show();
+                    aiImage.setImageResource(R.drawable.off);
+                    aiText.setText("인공지능 알림off");
+
+                    // 인공지능 관련 기능 해제
+                }
+            }
+        });
+
+        xBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
