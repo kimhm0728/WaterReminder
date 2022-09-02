@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="NumberPickerStyle">
+        <!-- 글자 크기-->
+        <item name="android:textSize">26dp</item>
+        <!-- 색상 변경 -->
+        <item name="android:textColorPrimary">#ffffff</item>
+        <item name="colorControlNormal">#ffffff</item>
+    </style>
+</resources>

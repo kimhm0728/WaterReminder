@@ -11,7 +11,6 @@
         android:id="@+id/percent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
         android:fontFamily="@font/nanumsquareextrabold"
         android:gravity="center_horizontal"
         android:includeFontPadding="false"
@@ -19,18 +18,16 @@
         android:textAlignment="center"
         android:textColor="#ffffff"
         android:textSize="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/water_pBar"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toStartOf="@+id/water_pBar"
+        app:layout_constraintTop_toTopOf="@+id/water_pBar" />
 
     <ProgressBar
         android:id="@+id/water_pBar"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="200dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="204dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginBottom="148dp"
         android:gravity="center_horizontal"
         android:max="100"
         android:progressBackgroundTint="#ffffff"
@@ -38,31 +35,31 @@
         android:rotation="270"
         android:scaleY="25"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/water"
-        app:layout_constraintStart_toStartOf="@+id/water" />
+        app:layout_constraintBottom_toTopOf="@+id/waterText"
+        app:layout_constraintStart_toStartOf="@+id/waterText" />
 
     <TextView
         android:id="@+id/waterText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
+        android:layout_marginStart="28dp"
         android:fontFamily="@font/nanumsquareextrabold"
         android:gravity="center_horizontal"
         android:includeFontPadding="false"
-        android:text="@string/string1"
+        android:text="오늘의 물 섭취량"
         android:textAlignment="center"
         android:textColor="#ffffff"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.678" />
+        app:layout_constraintVertical_bias="0.588" />
 
     <TextView
         android:id="@+id/water"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/nanumsquareextrabold"
         android:text="0mL"
         android:textAlignment="center"
@@ -76,7 +73,6 @@
         android:id="@+id/dayText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="200dp"
         android:fontFamily="@font/nanumsquareextrabold"
         android:gravity="center_horizontal"
         android:includeFontPadding="false"
@@ -84,14 +80,14 @@
         android:textAlignment="center"
         android:textColor="#ffffff"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/water_pBar"
-        app:layout_constraintTop_toTopOf="@+id/percent" />
+        app:layout_constraintStart_toEndOf="@+id/water_pBar"
+        app:layout_constraintTop_toTopOf="@+id/water_pBar" />
 
     <TextView
         android:id="@+id/day"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/nanumsquareextrabold"
         android:text="0mL"
         android:textAlignment="center"
@@ -104,7 +100,7 @@
         android:id="@+id/leftText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
+        android:layout_marginStart="80dp"
         android:fontFamily="@font/nanumsquareextrabold"
         android:gravity="center_horizontal"
         android:includeFontPadding="false"
@@ -119,15 +115,14 @@
         android:id="@+id/left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="0mL"
-        android:layout_marginTop="15dp"
         android:textAlignment="center"
         android:textColor="#ffffff"
         android:textSize="16sp"
-        tools:layout_editor_absoluteX="376dp"
-        tools:layout_editor_absoluteY="590dp"
+        android:fontFamily="@font/nanumsquareextrabold"
         app:layout_constraintEnd_toEndOf="@+id/leftText"
-        app:layout_constraintTop_toBottomOf="@+id/leftText"/>
+        app:layout_constraintTop_toBottomOf="@+id/leftText" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -147,7 +142,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="110dp"
-            android:layout_margin="5dp"
+            android:layout_margin="1dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -170,14 +165,14 @@
                 android:includeFontPadding="false"
                 android:text="블루투스"
                 android:textColor="#80000000"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="110dp"
-            android:layout_margin="5dp"
+            android:layout_margin="1dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -188,7 +183,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:background="@drawable/weight"
-                android:contentDescription="몸무게"
+                android:contentDescription="몸무게입력"
                 android:text="input" />
 
             <TextView
@@ -198,16 +193,16 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/nanumsquareextrabold"
                 android:includeFontPadding="false"
-                android:text="몸무게"
+                android:text="몸무게 입력"
                 android:textColor="#80000000"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="110dp"
-            android:layout_margin="5dp"
+            android:layout_margin="1dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -230,13 +225,13 @@
                 android:includeFontPadding="false"
                 android:text="통계"
                 android:textColor="#80000000"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="110dp"
-            android:layout_margin="5dp"
+            android:layout_margin="1dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -259,7 +254,7 @@
                 android:includeFontPadding="false"
                 android:text="알림"
                 android:textColor="#80000000"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
     </LinearLayout>
