@@ -32,7 +32,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         //OREO API 26 이상에서는 채널 필요
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
-            builder.setSmallIcon(R.drawable.ic_launcher_foreground); //mipmap 사용시 Oreo 이상에서 시스템 UI 에러남
+            builder.setSmallIcon(R.mipmap.ic_launcher);
 
             String channelName ="매일 알람 채널";
             String description = "매일 정해진 시간에 알람합니다.";
@@ -53,10 +53,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         builder.setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-
-                .setTicker("{Time to watch some cool stuff!}")
-                .setContentTitle("상태바 드래그시 보이는 타이틀")
-                .setContentText("상태바 드래그시 보이는 서브타이틀")
+                .setContentTitle("물 마시는 거 잊지 마세요!")
                 .setContentInfo("INFO")
                 .setContentIntent(pendingI);
 
