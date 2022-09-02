@@ -3,12 +3,8 @@ package com.example.WaterCollect;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.NumberPicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,40 +13,34 @@ import java.util.Locale;
 
 public class InputActivity extends AppCompatActivity {
 
-    private Button button;
-    private EditText edit;
     private TextView text;
     private String weight;
+    private NumberPicker number_picker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
 
-        edit = findViewById(R.id.edit);
         text = findViewById(R.id.text);
         text.setText("");
+        number_picker=findViewById(R.id.number_picker);
+        number_picker.setMaxValue(200);
+        number_picker.setMinValue(0);
+        number_picker.setValue(0);
 
-        button = findViewById(R.id.button);
 
-        button.setOnClickListener(new View.OnClickListener() {
-
+        number_picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
-            public void onClick(View view) {
-                if(!TextUtils.isEmpty(edit.getText())) {
-                    weight = edit.getText().toString();
-                    String day = Integer.toString(Integer.parseInt(weight)*30);
-                    double amount = Double.parseDouble(day);
+            public void onValueChange(NumberPicker picker, int oldValue, int newValue) {
+                weight=Integer.toString(newValue);
+                String day = Integer.toString(newValue*30);
+                double amount = Double.parseDouble(day);
 
-                    DecimalFormat formatter = new DecimalFormat("#,###");
-                    String formatted = formatter.format(amount);
+                DecimalFormat formatter = new DecimalFormat("#,###");
+                String formatted = formatter.format(amount);
 
-                    text.setText(String.format(Locale.KOREA,"일일 섭취량은 %smL입니다.", formatted));
-                }
-                else {
-                    Toast.makeText(InputActivity.this, "몸무게가 입력되지 않았습니다.", Toast.LENGTH_SHORT).show();
-                }
-
+                text.setText(String.format(Locale.KOREA,"일일 섭취량은 %smL입니다.", formatted));
             }
         });
 
