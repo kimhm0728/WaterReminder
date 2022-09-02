@@ -30,7 +30,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton setting_btn;
 
     private static int water = 0; // 무게센서 데이터
-    public static int waterSum = 0; // 총 섭취량
+    public static int waterSum = 500; // 총 섭취량
     private static int day = 0; // 하루 권장 섭취량
     private static int ratio = 0; // 권장량 달성비율
     private static int weight = 0;
@@ -374,16 +373,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() { backKeyHandler.onBackPressed(); }
 
-    public String decimalChange(int s) { // 천단위로 콤마 붙이는 함수
-        String number = Integer.toString(s);
-        double amount = Double.parseDouble(number);
-        DecimalFormat formatter = new DecimalFormat("#,###");
-        String formatted = formatter.format(amount);
-        return formatted;
-    }
-
     public void windowSet() {
-        total_text.setText(String.format(Locale.KOREA, "%smL", decimalChange(waterSum)));
+        total_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(waterSum)));
 
         switch(bluetoothCheck) {
             case 1:
@@ -402,11 +393,11 @@ public class MainActivity extends AppCompatActivity {
             day_water.setText(String.format("하루 권장량"));
             ratio = (int) (((double) waterSum / day) * 100); // 권장량 달성비율
             percent.setText(String.format(Locale.KOREA, "%d%%", ratio));
-            day_text.setText(String.format(Locale.KOREA, "%smL", decimalChange(day)));
-            left_text.setText(String.format(Locale.KOREA, "%smL", decimalChange(day - waterSum)));
+            day_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(day)));
+            left_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(day - waterSum)));
         }
 
-        ratio_pBar.setProgress(50); // 하루 권장량 달성비율만큼 progressBar에 적용
+        ratio_pBar.setProgress(ratio); // 하루 권장량 달성비율만큼 progressBar에 적용
     }
 
     public void resetAlarm(Context context) {
