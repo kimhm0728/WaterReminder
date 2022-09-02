@@ -3,9 +3,6 @@ package com.example.WaterCollect;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.NumberPicker;
 
@@ -36,6 +33,7 @@ public class InputActivity extends AppCompatActivity {
         number_picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldValue, int newValue) {
+                weight=Integer.toString(newValue);
                 String day = Integer.toString(newValue*30);
                 double amount = Double.parseDouble(day);
 
