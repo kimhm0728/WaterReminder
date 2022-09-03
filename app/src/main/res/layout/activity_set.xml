@@ -8,6 +8,13 @@
     tools:context=".SetActivity">
 
     <LinearLayout
+        android:id="@+id/LinearLayoutAll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="100">
+
+    <LinearLayout
         android:id="@+id/LinearLayout1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -26,225 +33,253 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TouchTargetSizeCheck" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/LinearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        android:weightSum="100"
-        app:layout_constraintTop_toBottomOf="@+id/LinearLayout1">
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="10" />
-
-        <ImageView
-            android:id="@+id/alarm"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="35"
-            app:layout_constraintBottom_toTopOf="@id/LinearLayout2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.145"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.123"
-            app:srcCompat="@drawable/alarm" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="55" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/LinearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/LinearLayout2"
-        android:weightSum="100">
+        <LinearLayout
+            android:id="@+id/LinearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            android:layout_weight="30"
+            app:layout_constraintTop_toBottomOf="@+id/LinearLayout1">
 
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="10" />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10" />
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="80"
-        android:gravity="center_vertical"
-        android:fontFamily="@font/nanumsquareextrabold"
-        android:includeFontPadding="false"
-        android:text="알림 설정"
-        android:textColor="#ffffff"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/alarm"
-        app:layout_constraintVertical_bias="0.092" />
+            <ImageView
+                android:id="@+id/alarm"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="35"
+                app:layout_constraintBottom_toTopOf="@id/LinearLayout2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.145"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.123"
+                app:srcCompat="@drawable/alarm" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="55" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="8"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            app:layout_constraintTop_toBottomOf="@id/LinearLayout2">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="80"
+                android:fontFamily="@font/nanumsquareextrabold"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:text="알림 설정"
+                android:textColor="#ffffff"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/alarm"
+                app:layout_constraintVertical_bias="0.092" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="17"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            app:layout_constraintTop_toBottomOf="@id/LinearLayout3">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10" />
+
+            <TextView
+                android:id="@+id/detail"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="80"
+                android:fontFamily="@font/nanumsquarebold"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:text="수분 섭취를 잊지 않도록 매일 오후 6시에 알림을 보내줍니다. 또한 인공지능을 통해 사용자의 수분 섭취 패턴을 분석하고 수분 섭취가 줄어들었을 때 알림을 보내줍니다."
+                android:textColor="#ffffff"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10" />
+
+        </LinearLayout>
 
         <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="10" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/LinearLayout4"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        android:weightSum="100"
-        app:layout_constraintTop_toBottomOf="@id/LinearLayout3">
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="10" />
-
-        <TextView
-            android:id="@+id/detail"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="80"
-            android:fontFamily="@font/nanumsquarebold"
-            android:includeFontPadding="false"
-            android:gravity="center_vertical"
-            android:text="수분 섭취를 잊지 않도록 매일 오후 6시에 알림을 보내줍니다. 또한 인공지능을 통해 사용자의 수분 섭취 패턴을 분석하고 수분 섭취가 줄어들었을 때 알림을 보내줍니다."
-            android:textColor="#ffffff"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="10" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/LinearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        android:weightSum="100"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LinearLayout4">
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="8" />
 
-        <ImageView
-            android:id="@+id/alarmImage"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+        <LinearLayout
+            android:id="@+id/LinearLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="10"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="horizontal"
+            android:weightSum="100"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/alarmText"
-            app:srcCompat="@drawable/off" />
+            app:layout_constraintTop_toBottomOf="@+id/LinearLayout4">
 
-        <TextView
-            android:id="@+id/alarmText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="50"
-            android:fontFamily="@font/nanumsquarebold"
-            android:gravity="center_vertical"
-            android:text="  정기 알림 off"
-            android:textColor="#ffffff"
-            android:textSize="18dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/alarmSwitch"
-            tools:ignore="MissingConstraints" />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8" />
 
-        <Switch
-            android:id="@+id/alarmSwitch"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="25"
-            android:switchMinWidth="80dp"
-            android:thumb="@drawable/switch_thumb"
-            android:track="@drawable/switch_selector"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/alarmImage"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/alarmText"
+                app:srcCompat="@drawable/off" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="7" />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/alarmText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="45"
+                android:fontFamily="@font/nanumsquarebold"
+                android:gravity="center_vertical"
+                android:text="정기 알림 off"
+                android:textColor="#ffffff"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/alarmSwitch"
+                tools:ignore="MissingConstraints" />
 
-    <LinearLayout
-        android:id="@+id/LinearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        android:weightSum="100"
-        app:layout_constraintStart_toStartOf="@id/LinearLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/LinearLayout2">
+            <Switch
+                android:id="@+id/alarmSwitch"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
+                android:switchMinWidth="70dp"
+                android:thumb="@drawable/switch_thumb"
+                android:track="@drawable/switch_selector"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="8" />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="7" />
 
-        <ImageView
-            android:id="@+id/aiImage"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearLayout6"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="10"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/aiText"
-            app:srcCompat="@drawable/off" />
+            android:orientation="horizontal"
+            android:weightSum="100"
+            app:layout_constraintStart_toStartOf="@id/LinearLayout5"
+            app:layout_constraintTop_toBottomOf="@id/LinearLayout5">
 
-        <TextView
-            android:id="@+id/aiText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="50"
-            android:fontFamily="@font/nanumsquarebold"
-            android:gravity="center_vertical"
-            android:text="  인공지능 알림 off"
-            android:textColor="#ffffff"
-            android:textSize="18dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/aiSwitch"
-            tools:ignore="MissingConstraints" />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8" />
 
-        <Switch
-            android:id="@+id/aiSwitch"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="25"
-            android:switchMinWidth="80dp"
-            android:thumb="@drawable/switch_thumb"
-            android:track="@drawable/switch_selector"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
+            <ImageView
+                android:id="@+id/aiImage"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/aiText"
+                app:srcCompat="@drawable/off" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
+
+            <TextView
+                android:id="@+id/aiText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="45"
+                android:fontFamily="@font/nanumsquarebold"
+                android:gravity="center_vertical"
+                android:text="인공지능 알림 off"
+                android:textColor="#ffffff"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/aiSwitch"
+                tools:ignore="MissingConstraints" />
+
+            <Switch
+                android:id="@+id/aiSwitch"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
+                android:switchMinWidth="70dp"
+                android:thumb="@drawable/switch_thumb"
+                android:track="@drawable/switch_selector"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="7" />
+
+        </LinearLayout>
 
         <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="7" />
 
     </LinearLayout>

@@ -39,7 +39,7 @@
             android:id="@+id/LinearLayout2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="60"
+            android:layout_weight="55"
             android:orientation="horizontal"
             android:weightSum="100"
             app:layout_constraintEnd_toEndOf="parent"
@@ -91,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="0dp"
-            android:layout_weight="30"
+            android:layout_weight="35"
             android:orientation="vertical"
             android:weightSum="100"
             app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +103,7 @@
                 android:id="@+id/LinearLayoutSub"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="30"
+                android:layout_weight="20"
                 android:orientation="horizontal"
                 android:weightSum="100">
 
@@ -132,7 +132,7 @@
                 android:id="@+id/text"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="70"
+                android:layout_weight="50"
                 android:fontFamily="@font/nanumsquarebold"
                 android:gravity="center"
                 android:includeFontPadding="false"
@@ -144,7 +144,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="30" />
+
         </LinearLayout>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

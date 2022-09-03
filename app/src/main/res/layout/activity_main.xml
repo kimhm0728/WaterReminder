@@ -7,254 +7,349 @@
     android:background="@drawable/gradient_main"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/percent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/nanumsquareextrabold"
-        android:gravity="center_horizontal"
-        android:includeFontPadding="false"
-        android:text="0%"
-        android:textAlignment="center"
-        android:textColor="#ffffff"
-        android:textSize="30dp"
-        app:layout_constraintEnd_toStartOf="@+id/water_pBar"
-        app:layout_constraintTop_toTopOf="@+id/water_pBar" />
-
-    <ProgressBar
-        android:id="@+id/water_pBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="42dp"
-        android:layout_marginBottom="148dp"
-        android:gravity="center_horizontal"
-        android:max="100"
-        android:progressBackgroundTint="#ffffff"
-        android:progressTint="#ffffff"
-        android:rotation="270"
-        android:scaleY="25"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/waterText"
-        app:layout_constraintStart_toStartOf="@+id/waterText" />
-
-    <TextView
-        android:id="@+id/waterText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:fontFamily="@font/nanumsquareextrabold"
-        android:gravity="center_horizontal"
-        android:includeFontPadding="false"
-        android:text="오늘의 물 섭취량"
-        android:textAlignment="center"
-        android:textColor="#ffffff"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.588" />
-
-    <TextView
-        android:id="@+id/water"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/nanumsquareextrabold"
-        android:text="0mL"
-        android:textAlignment="center"
-        android:textColor="#ffffff"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/waterText"
-        app:layout_constraintTop_toBottomOf="@+id/waterText" />
-
-
-    <TextView
-        android:id="@+id/dayText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/nanumsquareextrabold"
-        android:gravity="center_horizontal"
-        android:includeFontPadding="false"
-        android:text="@string/string2"
-        android:textAlignment="center"
-        android:textColor="#ffffff"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/water_pBar"
-        app:layout_constraintTop_toTopOf="@+id/water_pBar" />
-
-    <TextView
-        android:id="@+id/day"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/nanumsquareextrabold"
-        android:text="0mL"
-        android:textAlignment="center"
-        android:textColor="#ffffff"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/dayText"
-        app:layout_constraintTop_toBottomOf="@+id/dayText" />
-
-    <TextView
-        android:id="@+id/leftText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:fontFamily="@font/nanumsquareextrabold"
-        android:gravity="center_horizontal"
-        android:includeFontPadding="false"
-        android:text="@string/string3"
-        android:textAlignment="center"
-        android:textColor="#ffffff"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/waterText"
-        app:layout_constraintTop_toTopOf="@+id/waterText" />
-
-    <TextView
-        android:id="@+id/left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="0mL"
-        android:textAlignment="center"
-        android:textColor="#ffffff"
-        android:textSize="16sp"
-        android:fontFamily="@font/nanumsquareextrabold"
-        app:layout_constraintEnd_toEndOf="@+id/leftText"
-        app:layout_constraintTop_toBottomOf="@+id/leftText" />
-
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/LinearLayoutAll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:gravity="bottom"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="100">
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="110dp"
-            android:layout_margin="1dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:id="@+id/LinearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="40"
+            android:orientation="horizontal"
+            android:weightSum="100">
 
-            <ImageButton
-                android:id="@+id/bluetooth_btn"
-                android:layout_width="90dp"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@drawable/bluetooth"
-                android:contentDescription="블루투스 Dialog"
-                android:text="bluetooth" />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
 
-            <TextView
-                android:id="@+id/bluetooth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/nanumsquareextrabold"
-                android:includeFontPadding="false"
-                android:text="블루투스"
-                android:textColor="#80000000"
-                android:textSize="16sp" />
+            <LinearLayout
+                android:id="@+id/LinearLayoutSub1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
+                android:orientation="vertical"
+                android:weightSum="80">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="30" />
+
+                <TextView
+                    android:id="@+id/percent"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="50"
+                    android:fontFamily="@font/nanumsquareextrabold"
+                    android:gravity="right"
+                    android:includeFontPadding="false"
+                    android:text="0%"
+                    android:textColor="#ffffff"
+                    android:textSize="30dp" />
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/water_pBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="40"
+                android:gravity="center_horizontal"
+                android:max="100"
+                android:progressBackgroundTint="#ffffff"
+                android:progressTint="#ffffff"
+                android:rotation="270"
+                android:scaleY="20"
+                android:textAlignment="center" />
+
+            <LinearLayout
+                android:id="@+id/LinearLayoutSub2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
+                android:orientation="vertical"
+                android:weightSum="80">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="30" />
+
+                <TextView
+                    android:id="@+id/dayText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="10"
+                    android:fontFamily="@font/nanumsquareextrabold"
+                    android:gravity="center_vertical|right"
+                    android:includeFontPadding="false"
+                    android:text="@string/string2"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/day"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="40"
+                    android:fontFamily="@font/nanumsquareextrabold"
+                    android:gravity="right"
+                    android:text="0mL"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
+
         </LinearLayout>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="110dp"
-            android:layout_margin="1dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:id="@+id/LinearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
 
-            <ImageButton
-                android:id="@+id/input_btn"
-                android:layout_width="90dp"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@drawable/weight"
-                android:contentDescription="몸무게입력"
-                android:text="input" />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="13" />
 
-            <TextView
-                android:id="@+id/input"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/nanumsquareextrabold"
-                android:includeFontPadding="false"
-                android:text="몸무게 입력"
-                android:textColor="#80000000"
-                android:textSize="16sp" />
+            <LinearLayout
+                android:id="@+id/LinearLayoutSub3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="37"
+                android:orientation="vertical"
+                android:weightSum="100">
+
+                <TextView
+                    android:id="@+id/waterText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="50"
+                    android:fontFamily="@font/nanumsquareextrabold"
+                    android:gravity="center_vertical|right"
+                    android:includeFontPadding="false"
+                    android:text="오늘의 물 섭취량"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/water"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="50"
+                    android:fontFamily="@font/nanumsquareextrabold"
+                    android:gravity="center_vertical|right"
+                    android:text="0mL"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LinearLayoutSub4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="37"
+                android:orientation="vertical"
+                android:weightSum="100"
+                app:layout_constraintStart_toEndOf="@+id/linearLayoutSub3"
+                app:layout_constraintTop_toTopOf="@+id/linearLayoutSub3">
+
+                <TextView
+                    android:id="@+id/leftText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="50"
+                    android:fontFamily="@font/nanumsquareextrabold"
+                    android:gravity="center_vertical|right"
+                    android:includeFontPadding="false"
+                    android:text="@string/string3"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/left"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="50"
+                    android:fontFamily="@font/nanumsquareextrabold"
+                    android:gravity="center_vertical|right"
+                    android:text="0mL"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="13" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="110dp"
-            android:layout_margin="1dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/statistics_btn"
-                android:layout_width="90dp"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@drawable/stat"
-                android:contentDescription="통계"
-                android:text="statistics" />
-
-            <TextView
-                android:id="@+id/statistics"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/nanumsquareextrabold"
-                android:includeFontPadding="false"
-                android:text="통계"
-                android:textColor="#80000000"
-                android:textSize="16sp" />
-        </LinearLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="13" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="110dp"
-            android:layout_margin="1dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:id="@+id/LinearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="17"
+            android:background="#FFFFFF"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
-            <ImageButton
-                android:id="@+id/setting_btn"
-                android:layout_width="90dp"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@drawable/setting"
-                android:contentDescription="알림"
-                android:text="statistics" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
+                android:orientation="vertical"
+                android:weightSum="100">
 
-            <TextView
-                android:id="@+id/setting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/nanumsquareextrabold"
-                android:includeFontPadding="false"
-                android:text="알림"
-                android:textColor="#80000000"
-                android:textSize="16sp" />
+                <ImageButton
+                    android:id="@+id/bluetooth_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="82"
+                    android:background="@drawable/bluetooth"
+                    android:contentDescription="블루투스 Dialog"
+                    android:text="bluetooth" />
+
+                <TextView
+                    android:id="@+id/bluetooth"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="18"
+                    android:fontFamily="@font/nanumsquareextrabold"
+                    android:gravity="center_horizontal"
+                    android:includeFontPadding="false"
+                    android:text="블루투스"
+                    android:textColor="#80000000"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
+                android:orientation="vertical"
+                android:weightSum="100">
+
+                <ImageButton
+                    android:id="@+id/input_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="82"
+                    android:background="@drawable/weight"
+                    android:contentDescription="몸무게입력"
+                    android:text="input" />
+
+                <TextView
+                    android:id="@+id/input"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="18"
+                    android:fontFamily="@font/nanumsquareextrabold"
+                    android:gravity="center_horizontal"
+                    android:includeFontPadding="false"
+                    android:text="몸무게 입력"
+                    android:textColor="#80000000"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
+                android:orientation="vertical"
+                android:weightSum="100">
+
+                <ImageButton
+                    android:id="@+id/statistics_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="82"
+                    android:background="@drawable/stat"
+                    android:contentDescription="통계"
+                    android:text="statistics" />
+
+                <TextView
+                    android:id="@+id/statistics"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="18"
+                    android:fontFamily="@font/nanumsquareextrabold"
+                    android:gravity="center_horizontal"
+                    android:includeFontPadding="false"
+                    android:text="통계"
+                    android:textColor="#80000000"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
+                android:orientation="vertical"
+                android:weightSum="100">
+
+                <ImageButton
+                    android:id="@+id/setting_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="82"
+                    android:background="@drawable/setting"
+                    android:contentDescription="알림"
+                    android:text="statistics" />
+
+                <TextView
+                    android:id="@+id/setting"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="18"
+                    android:fontFamily="@font/nanumsquareextrabold"
+                    android:gravity="center_horizontal"
+                    android:includeFontPadding="false"
+                    android:text="알림"
+                    android:textColor="#80000000"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
