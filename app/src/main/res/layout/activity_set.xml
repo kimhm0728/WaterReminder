@@ -7,110 +7,79 @@
     android:background="@drawable/gradient_main"
     tools:context=".SetActivity">
 
+    <LinearLayout
+        android:id="@+id/LinearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:orientation="vertical">
 
-    <Switch
-        android:id="@+id/aiSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="236dp"
-        android:layout_marginEnd="16dp"
-        android:minHeight="48dp"
-        android:switchMinWidth="80dp"
-        android:switchPadding="200dp"
-        android:track="@drawable/switch_selector"
-        android:thumb="@drawable/switch_thumb"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.875"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/alarmSwitch" />
+        <ImageButton
+            android:id="@+id/x_btn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/finish"
+            android:contentDescription="나가기 버튼"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TouchTargetSizeCheck" />
+    </LinearLayout>
 
-    <Switch
-        android:id="@+id/alarmSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="236dp"
-        android:layout_marginTop="384dp"
-        android:layout_marginEnd="16dp"
-        android:minHeight="48dp"
-        android:switchMinWidth="80dp"
-        android:switchPadding="200dp"
-        android:track="@drawable/switch_selector"
-        android:thumb="@drawable/switch_thumb"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.875"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:id="@+id/LinearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        app:layout_constraintTop_toBottomOf="@+id/LinearLayout1">
 
-    <ImageView
-        android:id="@+id/alarmImage"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.072"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/alarmText"
-        app:srcCompat="@drawable/off" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10" />
 
-    <ImageView
-        android:id="@+id/aiImage"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.072"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/aiText"
-        app:srcCompat="@drawable/off" />
+        <ImageView
+            android:id="@+id/alarm"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="35"
+            app:layout_constraintBottom_toTopOf="@id/LinearLayout2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.145"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.123"
+            app:srcCompat="@drawable/alarm" />
 
-    <TextView
-        android:id="@+id/alarmText"
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="55" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LinearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/LinearLayout2"
+        android:weightSum="100">
+
+    <Space
         android:layout_width="0dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="14dp"
-        android:fontFamily="@font/nanumsquarebold"
-        android:minHeight="48dp"
-        android:text="정기 알림 off"
-        android:textColor="#ffffff"
-        android:textSize="18dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/alarmSwitch"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
-        android:id="@+id/aiText"
-        android:layout_width="0dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="14dp"
-        android:fontFamily="@font/nanumsquarebold"
-        android:minHeight="48dp"
-        android:text="인공지능 알림 off"
-        android:textColor="#ffffff"
-        android:textSize="18dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/aiSwitch"
-        tools:ignore="MissingConstraints" />
-
-    <ImageView
-        android:id="@+id/alarm"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="13dp"
-        app:layout_constraintBottom_toTopOf="@id/alarmSwitch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.145"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.123"
-        app:srcCompat="@drawable/alarm" />
+        android:layout_height="match_parent"
+        android:layout_weight="10" />
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="80"
+        android:gravity="center_vertical"
         android:fontFamily="@font/nanumsquareextrabold"
         android:includeFontPadding="false"
         android:text="알림 설정"
@@ -121,33 +90,163 @@
         app:layout_constraintTop_toBottomOf="@id/alarm"
         app:layout_constraintVertical_bias="0.092" />
 
-    <TextView
-        android:id="@+id/detail"
-        android:layout_width="270dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/nanumsquarebold"
-        android:includeFontPadding="false"
-        android:text="수분 섭취를 잊지 않도록 매일 오후 6시에 알림을 보내줍니다. 또한 인공지능을 통해 사용자의 수분 섭취 패턴을 분석하고 수분 섭취가 줄어들었을 때 알림을 보내줍니다."
-        android:textColor="#ffffff"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LinearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        app:layout_constraintTop_toBottomOf="@id/LinearLayout3">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10" />
+
+        <TextView
+            android:id="@+id/detail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="80"
+            android:fontFamily="@font/nanumsquarebold"
+            android:includeFontPadding="false"
+            android:gravity="center_vertical"
+            android:text="수분 섭취를 잊지 않도록 매일 오후 6시에 알림을 보내줍니다. 또한 인공지능을 통해 사용자의 수분 섭취 패턴을 분석하고 수분 섭취가 줄어들었을 때 알림을 보내줍니다."
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LinearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:weightSum="100"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/LinearLayout4">
 
-    <ImageButton
-        android:id="@+id/x_btn"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/finish"
-        android:contentDescription="나가기 버튼"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="TouchTargetSizeCheck" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8" />
 
+        <ImageView
+            android:id="@+id/alarmImage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/alarmText"
+            app:srcCompat="@drawable/off" />
+
+        <TextView
+            android:id="@+id/alarmText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:fontFamily="@font/nanumsquarebold"
+            android:gravity="center_vertical"
+            android:text="  정기 알림 off"
+            android:textColor="#ffffff"
+            android:textSize="18dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/alarmSwitch"
+            tools:ignore="MissingConstraints" />
+
+        <Switch
+            android:id="@+id/alarmSwitch"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="25"
+            android:switchMinWidth="80dp"
+            android:thumb="@drawable/switch_thumb"
+            android:track="@drawable/switch_selector"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LinearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        app:layout_constraintStart_toStartOf="@id/LinearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/LinearLayout2">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8" />
+
+        <ImageView
+            android:id="@+id/aiImage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/aiText"
+            app:srcCompat="@drawable/off" />
+
+        <TextView
+            android:id="@+id/aiText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:fontFamily="@font/nanumsquarebold"
+            android:gravity="center_vertical"
+            android:text="  인공지능 알림 off"
+            android:textColor="#ffffff"
+            android:textSize="18dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/aiSwitch"
+            tools:ignore="MissingConstraints" />
+
+        <Switch
+            android:id="@+id/aiSwitch"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="25"
+            android:switchMinWidth="80dp"
+            android:thumb="@drawable/switch_thumb"
+            android:track="@drawable/switch_selector"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
