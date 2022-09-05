@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton setting_btn;
 
     private static int water = 0; // 무게센서 데이터
-    public static int waterSum = 500; // 총 섭취량
+    public static int waterSum = 0; // 총 섭취량
     private static int day = 0; // 하루 권장 섭취량
     private static int ratio = 0; // 권장량 달성비율
     private static int weight = 0;
@@ -361,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 try {
                     //1초 마다 받아옴
-                    Thread.sleep(1000);
+                    Thread.sleep(60000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
