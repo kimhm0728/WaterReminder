@@ -36,11 +36,11 @@ class DataInsert extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
 
-        String name = (String)params[1];
-        String country = (String)params[2];
+        String device = (String)params[1];
+        String intake = (String)params[2];
 
         String serverURL = (String)params[0];
-        String postParameters = "name=" + name + "&country=" + country;
+        String postParameters = "device=" + device + "&intake=" + intake;
 
         try {
 
