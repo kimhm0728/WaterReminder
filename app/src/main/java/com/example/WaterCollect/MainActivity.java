@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
@@ -23,9 +24,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,13 +70,17 @@ public class MainActivity extends AppCompatActivity {
     private int bluetoothCheck = 3;
     // 0: 블루투스 미지원 1: 블루투스 off 2: 블루투스 on, 연결필요 3: 연결완료
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("message");
+    private static String IP_ADDRESS = "192.168.45.134";
+    String device = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                    Settings.Secure.ANDROID_ID); // 디바이스 시리얼 넘버 SSAID
+
+    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context = getApplicationContext();
 
         day_water = findViewById(R.id.dayText);
         total_text = findViewById(R.id.water);
@@ -302,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
             outputStream = bluetoothSocket.getOutputStream();
             inputStream = bluetoothSocket.getInputStream();
             receiveData();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -312,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
         //데이터 수신을 위한 버퍼 생성
         readBufferPosition = 0;
         readBuffer = new byte[1024];
+        DataInsert task = new DataInsert();
 
         //데이터 수신을 위한 쓰레드 생성
         workerThread = new Thread(new Runnable() {
@@ -335,17 +339,15 @@ public class MainActivity extends AppCompatActivity {
                                     byte[] encodedBytes = new byte[readBufferPosition];
                                     System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
                                     //인코딩 된 바이트 배열을 문자열로 변환
-                                    final String waterStr = new String(encodedBytes, "UTF-8");
-                                    // 다시 int로 변환
-                                    water = Integer.parseInt(waterStr);
+                                    final String water = new String(encodedBytes, "UTF-8");
                                     readBufferPosition = 0;
                                     handler.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            waterSum += water;
+                                            waterSum += Integer.parseInt(water);;
                                             windowSet();
-                                            // 받은 센서 값을 database에 전송
-                                            myRef.setValue(Integer.toString(waterSum));
+                                            // 받은 센서 값을 서버에 전송
+                                            task.execute("http://" + IP_ADDRESS + "/insert.php", device, water);
                                         }
                                     });
                                 } // 개행문자가 아닐경우
@@ -416,6 +418,10 @@ public class MainActivity extends AppCompatActivity {
         //다음날 0시에 맞추기 위해 24시간을 뜻하는 상수인 AlarmManager.INTERVAL_DAY를 더해줌.
         resetAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, resetCal.getTimeInMillis()
                 +AlarmManager.INTERVAL_DAY, AlarmManager.INTERVAL_DAY, resetSender);
+    }
+
+    public static Context getAppContext() {
+        return context;
     }
 
 }
