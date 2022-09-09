@@ -3,6 +3,7 @@ package com.example.WaterCollect;
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -10,24 +11,31 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -36,7 +44,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
-    private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
+    private final BackKeyHandler backKeyHandler = new BackKeyHandler(this);
 
     private TextView day_water;
     private TextView total_text;
@@ -49,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton stat_btn;
     private ImageButton setting_btn;
 
-    private static int water = 0; // 무게센서 데이터
+    private static String water;
     public static int waterSum = 0; // 총 섭취량
     private static int day = 0; // 하루 권장 섭취량
     private static int ratio = 0; // 권장량 달성비율
@@ -70,17 +78,13 @@ public class MainActivity extends AppCompatActivity {
     private int bluetoothCheck = 3;
     // 0: 블루투스 미지원 1: 블루투스 off 2: 블루투스 on, 연결필요 3: 연결완료
 
-    private static String IP_ADDRESS = "192.168.45.134";
-    String device = Settings.Secure.getString(getApplicationContext().getContentResolver(),
-                    Settings.Secure.ANDROID_ID); // 디바이스 시리얼 넘버 SSAID
-
-    private static Context context;
+    private final static String IP_ADDRESS = "10.0.2.2";
+    private String device; // 디바이스 시리얼 넘버 SSAID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context = getApplicationContext();
 
         day_water = findViewById(R.id.dayText);
         total_text = findViewById(R.id.water);
@@ -92,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
         input_btn = findViewById(R.id.input_btn);
         stat_btn = findViewById(R.id.statistics_btn);
         setting_btn = findViewById(R.id.setting_btn);
+
+        device = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
         //위치권한 허용 코드
         String[] permission_list = {
@@ -315,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
         //데이터 수신을 위한 버퍼 생성
         readBufferPosition = 0;
         readBuffer = new byte[1024];
-        DataInsert task = new DataInsert();
+        DataInserter task = new DataInserter();
 
         //데이터 수신을 위한 쓰레드 생성
         workerThread = new Thread(new Runnable() {
@@ -339,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
                                     byte[] encodedBytes = new byte[readBufferPosition];
                                     System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
                                     //인코딩 된 바이트 배열을 문자열로 변환
-                                    final String water = new String(encodedBytes, "UTF-8");
+                                    water = new String(encodedBytes, "UTF-8");
                                     readBufferPosition = 0;
                                     handler.post(new Runnable() {
                                         @Override
@@ -402,7 +408,7 @@ public class MainActivity extends AppCompatActivity {
         ratio_pBar.setProgress(ratio); // 하루 권장량 달성비율만큼 progressBar에 적용
     }
 
-    public void resetAlarm(Context context) {
+    public void resetAlarm(@NonNull Context context) {
         // 자정이 되면 물 섭취량을 0으로 다시 초기화
         AlarmManager resetAlarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent resetIntent = new Intent(context, IntakeReceiver.class);
@@ -420,8 +426,85 @@ public class MainActivity extends AppCompatActivity {
                 +AlarmManager.INTERVAL_DAY, AlarmManager.INTERVAL_DAY, resetSender);
     }
 
-    public static Context getAppContext() {
-        return context;
+    // post 방식으로 php->MySQL 데이터 전송
+    class DataInserter extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog;
+
+        private final static String TAG = "phptest";
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = ProgressDialog.show(MainActivity.this,
+                    "Please Wait", null, true, true);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            // mTextViewResult.setText(result);
+            Log.d(TAG, "POST response  - " + result);
+        }
+
+        @Override
+        protected String doInBackground(@NonNull String... params) {
+
+            String device = (String)params[1];
+            String intake = (String)params[2];
+
+            String serverURL = (String)params[0];
+            String postParameters = "device=" + device + "&intake=" + intake;
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "POST response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+                bufferedReader.close();
+
+                return sb.toString();
+
+            } catch (Exception e) {
+
+                Log.d(TAG, "InsertData: Error ", e);
+                return new String("Error: " + e.getMessage());
+            }
+
+        }
     }
 
 }

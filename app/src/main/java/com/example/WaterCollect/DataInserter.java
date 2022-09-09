@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,30 +13,30 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-class DataInsert extends AsyncTask<String, Void, String> {
+class DataInserter extends AsyncTask<String, Void, String> {
     ProgressDialog progressDialog;
 
-    private static String TAG = "phptest";
+    private final static String TAG = "phptest";
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
 
-        progressDialog = ProgressDialog.show(MainActivity.getAppContext(),
-                "Please Wait", null, true, true);
+        //progressDialog = ProgressDialog.show(MainActivity.,
+        //        "Please Wait", null, true, true);
     }
 
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
-        progressDialog.dismiss();
+        //progressDialog.dismiss();
         // mTextViewResult.setText(result);
         Log.d(TAG, "POST response  - " + result);
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected String doInBackground(@NonNull String... params) {
 
         String device = (String)params[1];
         String intake = (String)params[2];
