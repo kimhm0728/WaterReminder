@@ -110,7 +110,7 @@ public class SetActivity extends AppCompatActivity {
                 else {
                     Toast.makeText(SetActivity.this, "알림이 해제되었습니다.", Toast.LENGTH_SHORT).show();
                     aiImage.setImageResource(R.drawable.off);
-                    aiText.setText("인공지능 알림off");
+                    aiText.setText("인공지능 알림 off");
 
                     // 인공지능 관련 기능 해제
                 }
