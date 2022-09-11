@@ -1,6 +1,7 @@
 package com.example.WaterCollect;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -10,7 +11,6 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,7 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView total_text;
     private TextView day_text;
     private TextView left_text;
+    private TextView device_text;
     private TextView percent;
     private ProgressBar ratio_pBar;
     private ImageButton bluetooth_btn;
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String IP_ADDRESS = "10.0.2.2";
     private String device; // 디바이스 시리얼 넘버 SSAID
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         total_text = findViewById(R.id.water);
         day_text = findViewById(R.id.day);
         left_text = findViewById(R.id.left);
+        device_text = findViewById(R.id.device);
         percent = findViewById(R.id.percent);
         ratio_pBar = findViewById(R.id.water_pBar);
         bluetooth_btn = findViewById(R.id.bluetooth_btn);
@@ -120,18 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 windowSet();
                 Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 // 선택 값이 onActivityResult 함수에서 콜백
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
                 startActivityForResult(intent, REQUEST_ENABLE_BT);
-                selectBluetoothDevice();
             }
 
         }
@@ -147,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Bluetooth 미지원 기기입니다.", Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
-                        Toast.makeText(getApplicationContext(), "휴대폰의 Bluetooth 기능을 켠 후 페어링할 장치를 선택해주세요.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "휴대폰의 Bluetooth 기능을 켠 후 연결할 장치를 선택해주세요.", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
                     case 3:
@@ -182,14 +173,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     } // onCreate() end
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // 액티비티에서 빠져나올 때 실행됨
-        Toast.makeText(getApplicationContext(), "test", Toast.LENGTH_SHORT).show();
         if(requestCode == 101 && !TextUtils.isEmpty(data.getStringExtra("weight"))) {
             // 액티비티에서 받은 값이 있는 경우
             weight = Integer.parseInt(data.getStringExtra("weight"));
@@ -199,18 +188,9 @@ public class MainActivity extends AppCompatActivity {
         windowSet();
     }
 
+    @SuppressLint("MissingPermission")
     public void selectBluetoothDevice() {
         //이미 페어링 되어있는 블루투스 기기를 탐색
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
         devices = bluetoothAdapter.getBondedDevices();
         //페어링 된 디바이스 크기 저장
         pairedDeviceCount = devices.size();
@@ -230,19 +210,9 @@ public class MainActivity extends AppCompatActivity {
             List<String> list = new ArrayList<>();
             //모든 디바이스의 이름을 리스트에 추가
             for (BluetoothDevice bluetoothDevice : devices) {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
                 list.add(bluetoothDevice.getName());
             }
-            list.add("취소");
+            list.add("닫기");
 
             //list를 Charsequence 배열로 변경
             final CharSequence[] charSequences = list.toArray(new CharSequence[list.size()]);
@@ -267,37 +237,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //연결 함수
+    @SuppressLint("MissingPermission")
     public void connectDevice(String deviceName) {
+        if(deviceName.equals("닫기"))
+            return;
+
         //페어링 된 디바이스 모두 탐색
         for (BluetoothDevice tempDevice : devices) {
             //사용자가 선택한 이름과 같은 디바이스로 설정하고 반복문 종료
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
             if (deviceName.equals(tempDevice.getName())) {
                 bluetoothDevice = tempDevice;
                 break;
             }
 
         }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        Toast.makeText(getApplicationContext(), bluetoothDevice.getName() + " 연결 완료!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), bluetoothDevice.getName() + " 연결 완료", Toast.LENGTH_SHORT).show();
         //UUID생성
         UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
         connect_status = true;
@@ -314,6 +268,8 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        device_text.setText(bluetoothDevice.getName());
     }
 
     public void receiveData() {
@@ -350,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
                                     handler.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            waterSum += Integer.parseInt(water);;
+                                            waterSum += Integer.parseInt(water);
                                             windowSet();
                                             // 받은 센서 값을 서버에 전송
                                             task.execute("http://" + IP_ADDRESS + "/insert.php", device, water);
@@ -368,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 try {
-                    //1초 마다 받아옴
+                    //1분 마다 받아옴
                     Thread.sleep(60000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
