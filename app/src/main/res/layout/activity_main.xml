@@ -14,10 +14,22 @@
         android:orientation="vertical"
         android:weightSum="100">
 
+        <TextView
+            android:id="@+id/device"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:fontFamily="@font/nanumsquareextrabold"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:text="연결된 기기가 존재하지 않습니다"
+            android:textColor="#ffffff"
+            android:textSize="15dp"  />
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="15" />
+            android:layout_weight="10" />
 
         <LinearLayout
             android:id="@+id/LinearLayout1"
