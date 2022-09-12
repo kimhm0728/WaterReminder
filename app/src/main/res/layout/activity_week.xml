@@ -8,8 +8,6 @@
     android:background="@drawable/gradient_main"
     tools:context=".WeekActivity">
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
@@ -19,7 +17,7 @@
     </LinearLayout>
 
     <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/Barchart"
+        android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.6">
