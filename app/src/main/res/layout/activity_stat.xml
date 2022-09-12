@@ -14,22 +14,50 @@
         android:weightSum="100"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/LinearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/x_btn"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="right"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/finish"
+                android:contentDescription="나가기 버튼"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </LinearLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="80"
+            tools:ignore="SpeakableTextPresentCheck">
+
+        </androidx.viewpager.widget.ViewPager>
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
             app:tabMode="fixed"
+            app:tabIndicatorGravity="top"
+            app:tabIndicatorColor="#ffffff"
+            app:tabTextColor="#ffffff"
+            app:tabSelectedTextColor="#ffffff"
+            app:tabBackground="@drawable/edit_ground"
+            app:tabTextAppearance="@style/tab_text"
             tools:ignore="SpeakableTextPresentCheck" />
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="70"
-            tools:ignore="SpeakableTextPresentCheck">
-
-        </androidx.viewpager.widget.ViewPager>
 
     </LinearLayout>
 

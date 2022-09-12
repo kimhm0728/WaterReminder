@@ -3,136 +3,119 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:weightSum="100"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_main"
     tools:context=".MonthActivity">
 
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/Barchart"
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.6">
+        android:layout_height="0dp"
+        android:layout_weight="7" />
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="60">
 
     </com.github.mikephil.charting.charts.BarChart>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:gravity="center"
+        android:layout_height="0dp"
+        android:layout_weight="12"
+        android:weightSum="100"
         android:orientation="horizontal">
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="40"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingBottom="64dp">
-
-            <TextView
-                android:id="@+id/emptyText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="16dp"
-                android:gravity="center"
-                android:textAlignment="center"
-                android:textColor="#ffffff"
-                android:textSize="18sp"
-                tools:text="Go do something..." />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="16dp"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:scaleType="centerInside" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:weightSum="100">
 
             <TextView
                 android:id="@+id/sum"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="합계"
+                android:layout_height="0dp"
+                android:layout_weight="50"
+                android:fontFamily="@font/nanumsquareextrabold"
+                android:gravity="center_horizontal"
+                android:text="총 섭취량"
                 android:textColor="#ffffff"
-                android:fontFamily="@font/nobilemedium"
-                android:textSize="25sp" />
+                android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/liter"
+                android:id="@+id/sum_liter"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_height="0dp"
+                android:layout_weight="50"
+                android:fontFamily="@font/nanumsquareextrabold"
                 android:gravity="center|top"
+                android:text="0mL"
                 android:textColor="#ffffff"
-                android:fontFamily="@font/nobilemedium"
-                android:text="0 L"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Space
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="5" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="40"
+            android:orientation="vertical"
+            android:weightSum="100">
 
             <TextView
                 android:id="@+id/average"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_height="0dp"
+                android:layout_weight="50"
+                android:fontFamily="@font/nanumsquareextrabold"
+                android:gravity="center_horizontal"
+                android:text="일일 평균 섭취량"
                 android:textColor="#ffffff"
-                android:gravity="center"
-                android:text="평균 크기"
-                android:fontFamily="@font/nobilemedium"
-                android:textSize="25sp" />
+                android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/liter2"
+                android:id="@+id/average_liter"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="#ffffff"
+                android:layout_height="0dp"
+                android:layout_weight="50"
+                android:fontFamily="@font/nanumsquareextrabold"
                 android:gravity="center|top"
-                android:fontFamily="@font/nobilemedium"
-                android:text="0 L"
-                android:textSize="25sp" />
+                android:text="0mL"
+                android:textColor="#ffffff"
+                android:textSize="20sp" />
         </LinearLayout>
 
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5" />
+
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="11" />
+
 </LinearLayout>
