@@ -169,8 +169,8 @@ public class MainActivity extends AppCompatActivity {
         stat_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent statIntent = new Intent(this, StatActivity.class);
-                //startActivity(statIntent);
+                Intent statIntent = new Intent(getApplicationContext(), StatActivity.class);
+                startActivity(statIntent);
             }
         });
 
