@@ -6,19 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_main"
-    tools:context=".Stat2Activity">
-
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-
-
-    </LinearLayout>
+    tools:context=".MonthActivity">
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/Barchart"
@@ -27,6 +15,14 @@
         android:layout_weight="0.6">
 
     </com.github.mikephil.charting.charts.BarChart>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/empty"
@@ -137,9 +133,6 @@
                 android:text="0 L"
                 android:textSize="25sp" />
         </LinearLayout>
-
-
-
 
     </LinearLayout>
 </LinearLayout>
