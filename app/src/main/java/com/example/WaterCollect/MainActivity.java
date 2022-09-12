@@ -388,7 +388,7 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 day_water.setText(String.format("아래의 블루투스 버튼을"));
                 day_text.setText("클릭하여 장치와 연결해주세요");
-                break;    // 0: 블루투스 미지원 1: 블루투스 off 2: 블루투스 on, 연결필요 3: 연결완료
+                break;
             case 3:
                 if (weight == 0) {
                     day_water.setText(String.format("몸무게를"));
@@ -396,12 +396,12 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     day_water.setText(String.format("하루 권장량"));
                     ratio = (int) (((double) waterSum / day) * 100); // 권장량 달성비율
-                    percent.setText(String.format(Locale.KOREA, "%d%%", ratio));
+                    percent.setText(String.format(Locale.KOREA, "%d%%", Math.min(ratio, 100)));
                     day_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(day)));
                 }
                 break;
         }
-        left_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(day - waterSum)));
+        left_text.setText(String.format(Locale.KOREA, "%smL", (day - waterSum < 0) ? 0 : StringChanger.decimalComma(day - waterSum)));
         ratio_pBar.setProgress(ratio); // 하루 권장량 달성비율만큼 progressBar에 적용
     }
 
