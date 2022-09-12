@@ -1,6 +1,8 @@
 package com.example.WaterCollect;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -12,15 +14,17 @@ public class StatActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private FragmentAdapter adapter;
+    private ImageButton xBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stat);
 
-        tabLayout=findViewById(R.id.tabs);
-        viewPager=findViewById(R.id.view_pager);
-        adapter=new FragmentAdapter(getSupportFragmentManager(),1);
+        xBtn = (ImageButton) findViewById(R.id.x_btn);
+        tabLayout = findViewById(R.id.tabs);
+        viewPager = findViewById(R.id.view_pager);
+        adapter = new FragmentAdapter(getSupportFragmentManager(),1);
 
         //FragmentAdapter에 컬렉션 담기
         adapter.addFragment(new WeekActivity());
@@ -34,5 +38,12 @@ public class StatActivity extends AppCompatActivity {
 
         tabLayout.getTabAt(0).setText("주");
         tabLayout.getTabAt(1).setText("월");
+
+        xBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 }
