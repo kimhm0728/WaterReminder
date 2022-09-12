@@ -59,6 +59,10 @@
             android:exported="true"
             tools:ignore="Instantiatable" />
 
+        <activity
+            android:name="com.example.WaterCollect.TabActivity"
+            android:exported="true" />
+
             <activity
                 android:name="com.example.WaterCollect.SetActivity"
                 android:exported="true" >
