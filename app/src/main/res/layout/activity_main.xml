@@ -39,16 +39,11 @@
             android:orientation="horizontal"
             android:weightSum="100">
 
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="5" />
-
             <LinearLayout
                 android:id="@+id/LinearLayoutSub1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="25"
+                android:layout_weight="30"
                 android:orientation="vertical"
                 android:weightSum="80">
 
@@ -144,16 +139,11 @@
             android:weightSum="100"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
 
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="13" />
-
             <LinearLayout
                 android:id="@+id/LinearLayoutSub3"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="37"
+                android:layout_weight="50"
                 android:orientation="vertical"
                 android:weightSum="100">
 
@@ -267,7 +257,7 @@
                     android:includeFontPadding="false"
                     android:text="블루투스"
                     android:textColor="#80000000"
-                    android:textSize="16sp" />
+                    android:textSize="14dp" />
             </LinearLayout>
 
 
@@ -298,7 +288,7 @@
                     android:includeFontPadding="false"
                     android:text="몸무게 입력"
                     android:textColor="#80000000"
-                    android:textSize="16sp" />
+                    android:textSize="14dp" />
 
             </LinearLayout>
 
@@ -329,7 +319,7 @@
                     android:includeFontPadding="false"
                     android:text="통계"
                     android:textColor="#80000000"
-                    android:textSize="16sp" />
+                    android:textSize="14dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -359,7 +349,7 @@
                     android:includeFontPadding="false"
                     android:text="알림"
                     android:textColor="#80000000"
-                    android:textSize="16sp" />
+                    android:textSize="14dp" />
             </LinearLayout>
 
         </LinearLayout>
