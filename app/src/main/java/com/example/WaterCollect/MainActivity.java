@@ -25,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Dimension;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -382,18 +383,26 @@ public class MainActivity extends AppCompatActivity {
 
         switch(bluetoothCheck) {
             case 1:
+                day_water.setTextSize(Dimension.SP, 13);
+                day_text.setTextSize(Dimension.SP, 13);
                 day_water.setText(String.format("블루투스 기능을"));
                 day_text.setText("켜주세요");
                 break;
             case 2:
+                day_water.setTextSize(Dimension.SP, 10);
+                day_text.setTextSize(Dimension.SP, 10);
                 day_water.setText(String.format("아래의 블루투스 버튼을"));
                 day_text.setText("클릭하여 장치와 연결해주세요");
                 break;
             case 3:
                 if (weight == 0) {
+                    day_water.setTextSize(Dimension.SP, 13);
+                    day_text.setTextSize(Dimension.SP, 13);
                     day_water.setText(String.format("몸무게를"));
                     day_text.setText("입력해주세요");
                 } else {
+                    day_water.setTextSize(Dimension.SP, 14);
+                    day_text.setTextSize(Dimension.SP, 16);
                     day_water.setText(String.format("하루 권장량"));
                     ratio = (int) (((double) waterSum / day) * 100); // 권장량 달성비율
                     percent.setText(String.format(Locale.KOREA, "%d%%", Math.min(ratio, 100)));
