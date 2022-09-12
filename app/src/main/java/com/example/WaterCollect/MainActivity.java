@@ -8,9 +8,11 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -70,15 +72,14 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothSocket bluetoothSocket = null; //블루투스 소켓
     private OutputStream outputStream = null; //블루투스에 데이터를 출력하기 위한 출력 스트림
     private InputStream inputStream = null; //블루투스에 데이터를 입력하기 위한 입력 스트림
-    private Thread workerThread = null; //문자열 수신에 사용되는 쓰레드
+    private Thread workerThread = null; //문자열 수신에 사용되는 스레드
     private byte[] readBuffer; //수신된 문자열 저장 버퍼
     private int readBufferPosition; //버퍼  내 문자 저장 위치
     private int pairedDeviceCount;  //페어링 된 기기의 크기를 지정할 변수
-    private boolean connect_status;
     private int bluetoothCheck = 3;
     // 0: 블루투스 미지원 1: 블루투스 off 2: 블루투스 on, 연결필요 3: 연결완료
 
-    private final static String IP_ADDRESS = "10.0.2.2";
+    private final static String IP_ADDRESS = "192.168.45.134"; // 에뮬레이터에서 테스트 시 10.0.2.2
     private String device; // 디바이스 시리얼 넘버 SSAID
 
     @SuppressLint("MissingPermission")
@@ -101,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
 
         device = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
+        // 블루투스 상태 변화에 따른 Broadcast Receiver 등록
+        IntentFilter stateFilter = new IntentFilter();
+        stateFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED); //BluetoothAdapter.ACTION_STATE_CHANGED : 블루투스 상태변화 액션
+        stateFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED); //연결 확인
+        stateFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED); //연결 끊김 확인
+        registerReceiver(mBluetoothStateReceiver, stateFilter);
+
         //위치권한 허용 코드
         String[] permission_list = {
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -120,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
             } else { // 기기의 블루투스 기능이 꺼져있을 경우
                 bluetoothCheck = 1;
                 windowSet();
+                // 사용자에게 활성화 요청
                 Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                // 선택 값이 onActivityResult 함수에서 콜백
                 startActivityForResult(intent, REQUEST_ENABLE_BT);
             }
 
@@ -187,6 +195,37 @@ public class MainActivity extends AppCompatActivity {
         else { } // 액티비티에서 받은 값이 없는 경우
         windowSet();
     }
+
+    // 블루투스 상태 변화에 따른 리시버
+    BroadcastReceiver mBluetoothStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, @NonNull Intent intent) {
+            final String action = intent.getAction();
+            Log.d("Bluetooth action", action);
+
+            switch (action) {
+                case BluetoothAdapter.ACTION_STATE_CHANGED: //블루투스의 연결 상태 변경
+                    final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                    switch(state) {
+                        case BluetoothAdapter.STATE_OFF: // 블루투스 비활성화
+                            bluetoothCheck = 1;
+                            break;
+                        case BluetoothAdapter.STATE_ON: // 블루투스 활성화
+                            bluetoothCheck = 2;
+                            break;
+                    }
+                    break;
+                case BluetoothDevice.ACTION_ACL_CONNECTED:  //블루투스 기기 연결
+                    bluetoothCheck = 3;
+                    break;
+                case BluetoothDevice.ACTION_ACL_DISCONNECTED:   //블루투스 기기 끊어짐
+                    bluetoothCheck = 2;
+                    device_text.setText("연결된 기기가 존재하지 않습니다");
+                    break;
+            }
+            windowSet();
+        }
+    };
 
     @SuppressLint("MissingPermission")
     public void selectBluetoothDevice() {
@@ -254,7 +293,6 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), bluetoothDevice.getName() + " 연결 완료", Toast.LENGTH_SHORT).show();
         //UUID생성
         UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
-        connect_status = true;
         //Rfcomm 채널을 통해 블루투스 디바이스와 통신하는 소켓 생성
 
         try {
@@ -277,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
         //데이터 수신을 위한 버퍼 생성
         readBufferPosition = 0;
         readBuffer = new byte[1024];
-        DataInserter task = new DataInserter();
+        final DataInserter[] task = new DataInserter[1];
 
         //데이터 수신을 위한 쓰레드 생성
         workerThread = new Thread(new Runnable() {
@@ -306,10 +344,12 @@ public class MainActivity extends AppCompatActivity {
                                     handler.post(new Runnable() {
                                         @Override
                                         public void run() {
+                                            water = water.replace("\r", "");
                                             waterSum += Integer.parseInt(water);
                                             windowSet();
                                             // 받은 센서 값을 서버에 전송
-                                            task.execute("http://" + IP_ADDRESS + "/insert.php", device, water);
+                                            task[0] = new DataInserter();
+                                            task[0].execute("http://" + IP_ADDRESS + "/insert.php", device, water);
                                         }
                                     });
                                 } // 개행문자가 아닐경우
@@ -324,8 +364,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 try {
-                    //1분 마다 받아옴
-                    Thread.sleep(60000);
+                    //10초 마다 받아옴
+                    Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -344,23 +384,24 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 day_water.setText(String.format("블루투스 기능을"));
                 day_text.setText("켜주세요");
-                return;
+                break;
             case 2:
                 day_water.setText(String.format("아래의 블루투스 버튼을"));
                 day_text.setText("클릭하여 장치와 연결해주세요");
-                return;
+                break;    // 0: 블루투스 미지원 1: 블루투스 off 2: 블루투스 on, 연결필요 3: 연결완료
+            case 3:
+                if (weight == 0) {
+                    day_water.setText(String.format("몸무게를"));
+                    day_text.setText("입력해주세요");
+                } else {
+                    day_water.setText(String.format("하루 권장량"));
+                    ratio = (int) (((double) waterSum / day) * 100); // 권장량 달성비율
+                    percent.setText(String.format(Locale.KOREA, "%d%%", ratio));
+                    day_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(day)));
+                }
+                break;
         }
-        if (weight == 0) {
-            day_water.setText(String.format("몸무게를"));
-            day_text.setText("입력해주세요");
-        } else {
-            day_water.setText(String.format("하루 권장량"));
-            ratio = (int) (((double) waterSum / day) * 100); // 권장량 달성비율
-            percent.setText(String.format(Locale.KOREA, "%d%%", ratio));
-            day_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(day)));
-            left_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(day - waterSum)));
-        }
-
+        left_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(day - waterSum)));
         ratio_pBar.setProgress(ratio); // 하루 권장량 달성비율만큼 progressBar에 적용
     }
 
@@ -401,7 +442,6 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             progressDialog.dismiss();
-            // mTextViewResult.setText(result);
             Log.d(TAG, "POST response  - " + result);
         }
 
@@ -461,6 +501,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        // Activity 소멸 시 호출
+        unregisterReceiver(mBluetoothStateReceiver);
+        super.onDestroy();
     }
 
 }
