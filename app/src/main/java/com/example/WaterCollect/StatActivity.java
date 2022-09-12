@@ -1,34 +1,38 @@
 package com.example.WaterCollect;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
-import com.github.mikephil.charting.charts.BarChart;
 
-public class StatActivity extends Fragment {
+import com.google.android.material.tabs.TabLayout;
 
-    private BarChart barchart;
-    private TextView sum;
-    private TextView liter;
-    private TextView average;
-    private TextView liter2;
+public class StatActivity extends AppCompatActivity {
 
-    @Nullable
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private FragmentAdapter adapter;
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_stat, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_stat);
 
-        return v;
+        tabLayout=findViewById(R.id.tabs);
+        viewPager=findViewById(R.id.view_pager);
+        adapter=new FragmentAdapter(getSupportFragmentManager(),1);
 
+        //FragmentAdapter에 컬렉션 담기
+        adapter.addFragment(new WeekActivity());
+        adapter.addFragment(new MonthActivity());
+
+        //ViewPager Fragment 연결
+        viewPager.setAdapter(adapter);
+
+        //ViewPager과 TabLayout 연결
+        tabLayout.setupWithViewPager(viewPager);
+
+        tabLayout.getTabAt(0).setText("주");
+        tabLayout.getTabAt(1).setText("월");
     }
 }
-
-
-

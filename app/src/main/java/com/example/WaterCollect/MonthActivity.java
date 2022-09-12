@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.BarChart;
 
-public class Stat2Activity extends Fragment {
+public class MonthActivity extends Fragment {
 
     private BarChart barchart;
     private TextView sum;
@@ -23,7 +23,7 @@ public class Stat2Activity extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v=inflater.inflate(R.layout.activity_stat2,container,false);
+        View v=inflater.inflate(R.layout.activity_month, container,false);
 
         return v;
     }
