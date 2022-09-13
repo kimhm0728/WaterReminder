@@ -2,10 +2,6 @@ package com.example.WaterCollect;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.app.ProgressDialog;
-import android.app.TabActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -14,7 +10,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -32,15 +27,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -81,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
     private int bluetoothCheck = 3;
     // 0: 블루투스 미지원 1: 블루투스 off 2: 블루투스 on, 연결필요 3: 연결완료
 
-    private final static String IP_ADDRESS = "192.168.45.134"; // 에뮬레이터에서 테스트 시 10.0.2.2
-    private String device; // 디바이스 시리얼 넘버 SSAID
+    public final static String IP_ADDRESS = "10.0.2.2"; // 에뮬레이터에서 테스트 시 10.0.2.2
+    public static String device; // 디바이스 시리얼 넘버 SSAID
 
     @SuppressLint("MissingPermission")
     @Override
@@ -126,10 +116,8 @@ public class MainActivity extends AppCompatActivity {
         } else { // 기기가 블루투스를 지원할 때
             if (bluetoothAdapter.isEnabled()) { // 기기의 블루투스 기능이 켜져있을 경우
                 bluetoothCheck = 2;
-                windowSet();
             } else { // 기기의 블루투스 기능이 꺼져있을 경우
                 bluetoothCheck = 1;
-                windowSet();
                 // 사용자에게 활성화 요청
                 Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(intent, REQUEST_ENABLE_BT);
@@ -137,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        resetAlarm(this);
+        IntakeResetter.resetAlarm(this);
         windowSet();
 
         bluetooth_btn.setOnClickListener(new View.OnClickListener() {
@@ -351,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
                                             windowSet();
                                             // 받은 센서 값을 서버에 전송
                                             task[0] = new DataInserter();
-                                            task[0].execute("http://" + IP_ADDRESS + "/insert.php", device, water);
+                                            task[0].execute("http://" + IP_ADDRESS + "/insert.php", device, water, "send");
                                         }
                                     });
                                 } // 개행문자가 아닐경우
@@ -413,104 +401,6 @@ public class MainActivity extends AppCompatActivity {
         }
         left_text.setText(String.format(Locale.KOREA, "%smL", (day - waterSum < 0) ? 0 : StringChanger.decimalComma(day - waterSum)));
         ratio_pBar.setProgress(ratio); // 하루 권장량 달성비율만큼 progressBar에 적용
-    }
-
-    public void resetAlarm(@NonNull Context context) {
-        // 자정이 되면 물 섭취량을 0으로 다시 초기화
-        AlarmManager resetAlarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent resetIntent = new Intent(context, IntakeReceiver.class);
-        PendingIntent resetSender = PendingIntent.getBroadcast(context, 0, resetIntent, 0);
-
-        // 자정 시간
-        Calendar resetCal = Calendar.getInstance();
-        resetCal.setTimeInMillis(System.currentTimeMillis());
-        resetCal.set(Calendar.HOUR_OF_DAY, 0);
-        resetCal.set(Calendar.MINUTE, 0);
-        resetCal.set(Calendar.SECOND, 0);
-
-        //다음날 0시에 맞추기 위해 24시간을 뜻하는 상수인 AlarmManager.INTERVAL_DAY를 더해줌.
-        resetAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, resetCal.getTimeInMillis()
-                +AlarmManager.INTERVAL_DAY, AlarmManager.INTERVAL_DAY, resetSender);
-    }
-
-    // post 방식으로 php->MySQL 데이터 전송
-    class DataInserter extends AsyncTask<String, Void, String> {
-        ProgressDialog progressDialog;
-
-        private final static String TAG = "phptest";
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            progressDialog = ProgressDialog.show(MainActivity.this,
-                    "Please Wait", null, true, true);
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            progressDialog.dismiss();
-            Log.d(TAG, "POST response  - " + result);
-        }
-
-        @Override
-        protected String doInBackground(@NonNull String... params) {
-
-            String device = (String)params[1];
-            String intake = (String)params[2];
-
-            String serverURL = (String)params[0];
-            String postParameters = "device=" + device + "&intake=" + intake;
-
-            try {
-
-                URL url = new URL(serverURL);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-
-                httpURLConnection.setReadTimeout(5000);
-                httpURLConnection.setConnectTimeout(5000);
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.connect();
-
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                outputStream.write(postParameters.getBytes("UTF-8"));
-                outputStream.flush();
-                outputStream.close();
-
-                int responseStatusCode = httpURLConnection.getResponseCode();
-                Log.d(TAG, "POST response code - " + responseStatusCode);
-
-                InputStream inputStream;
-                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
-                    inputStream = httpURLConnection.getInputStream();
-                }
-                else{
-                    inputStream = httpURLConnection.getErrorStream();
-                }
-
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-
-                while((line = bufferedReader.readLine()) != null){
-                    sb.append(line);
-                }
-
-                bufferedReader.close();
-
-                return sb.toString();
-
-            } catch (Exception e) {
-
-                Log.d(TAG, "InsertData: Error ", e);
-                return new String("Error: " + e.getMessage());
-            }
-
-        }
     }
 
     @Override
