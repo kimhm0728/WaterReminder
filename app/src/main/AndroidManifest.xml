@@ -17,6 +17,7 @@
 
     <application
         android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -58,11 +59,7 @@
             android:name="com.example.WaterCollect.MonthActivity"
             android:exported="true"
             tools:ignore="Instantiatable" />
-
-        <activity
-            android:name="com.example.WaterCollect.TabActivity"
-            android:exported="true" />
-
+        
             <activity
                 android:name="com.example.WaterCollect.SetActivity"
                 android:exported="true" >
