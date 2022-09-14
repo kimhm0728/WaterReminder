@@ -9,7 +9,6 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -19,7 +18,7 @@ public class ChartSetter {
     private int intakeSum = 0;
     private String[] days;
     private int type; // 주, 월을 구분
-    private static int todayIntake;
+    private static int todayIntake = 0;
 
     // MySQL 에서 섭취량을 가져오는 생성자
     public ChartSetter(int type) {
@@ -75,11 +74,11 @@ public class ChartSetter {
         barChart.setDrawValueAboveBar(true); // 값이 차트 위or아래에 그려질 건지
         barChart.setPinchZoom(false); // 두손가락으로 줌 설정
         barChart.setDrawGridBackground(false); // 격자구조
-        barChart.setMaxVisibleValueCount(type); // 그래프 최대 갯수
+        barChart.setMaxVisibleValueCount(type+2); // 그래프 최대 갯수
         barChart.setDescription(null);
 
         XAxis xAxis = barChart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(days));
+        xAxis.setValueFormatter(new GraphAxisValueFormatter(days));
         xAxis.setLabelCount(type+2, true);
         xAxis.setTextColor(Color.WHITE);
         xAxis.setGridColor(Color.WHITE);
