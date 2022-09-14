@@ -7,7 +7,6 @@ import java.text.DecimalFormat;
 
 // 소숫점 한 자리까지 보이기 위한 Formatter
 public class MyValueFormatter extends ValueFormatter implements IAxisValueFormatter {
-
     private DecimalFormat mFormat;
 
     public MyValueFormatter() {
