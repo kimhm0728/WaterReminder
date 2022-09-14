@@ -71,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
     private int bluetoothCheck = 3;
     // 0: 블루투스 미지원 1: 블루투스 off 2: 블루투스 on, 연결필요 3: 연결완료
 
-    public final static String IP_ADDRESS = "10.0.2.2"; // 에뮬레이터에서 테스트 시 10.0.2.2
+    public final static String IP_ADDRESS = "192.168.45.134";
+    // 에뮬레이터 10.0.2.2, 안드로이드 192.168.45.134
     public static String device; // 디바이스 시리얼 넘버 SSAID
 
     @SuppressLint("MissingPermission")
@@ -335,7 +336,6 @@ public class MainActivity extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             water = water.replace("\r", "");
-                                            waterSum += Integer.parseInt(water);
                                             windowSet();
                                             // 받은 센서 값을 서버에 전송
                                             task[0] = new DataInserter();
@@ -368,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() { backKeyHandler.onBackPressed(); }
 
     public void windowSet() {
-        total_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(waterSum)));
+        total_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(ChartSetter.getTodayIntake())));
 
         switch(bluetoothCheck) {
             case 1:
@@ -393,13 +393,13 @@ public class MainActivity extends AppCompatActivity {
                     day_water.setTextSize(Dimension.SP, 14);
                     day_text.setTextSize(Dimension.SP, 16);
                     day_water.setText(String.format("하루 권장량"));
-                    ratio = (int) (((double) waterSum / day) * 100); // 권장량 달성비율
+                    ratio = (int) (((double) ChartSetter.getTodayIntake() / day) * 100); // 권장량 달성비율
                     percent.setText(String.format(Locale.KOREA, "%d%%", Math.min(ratio, 100)));
                     day_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(day)));
                 }
                 break;
         }
-        left_text.setText(String.format(Locale.KOREA, "%smL", (day - waterSum < 0) ? 0 : StringChanger.decimalComma(day - waterSum)));
+        left_text.setText(String.format(Locale.KOREA, "%smL", (day - ChartSetter.getTodayIntake() < 0) ? 0 : StringChanger.decimalComma(day - ChartSetter.getTodayIntake())));
         ratio_pBar.setProgress(ratio); // 하루 권장량 달성비율만큼 progressBar에 적용
     }
 
