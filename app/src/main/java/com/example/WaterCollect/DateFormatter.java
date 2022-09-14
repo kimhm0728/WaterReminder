@@ -17,7 +17,7 @@ public class DateFormatter {
         if(check == 1) // MySQL 에 전달할 문자열 format
             dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         else // Chart 의 x축이 될 문자열 format
-            dateFormat = new SimpleDateFormat("MM/dd");
+            dateFormat = new SimpleDateFormat("M/d");
         String todayString = dateFormat.format(todayDate);
 
         if(day == 0)
@@ -39,7 +39,7 @@ public class DateFormatter {
         if(check == 1) // MySQL 에 전달할 문자열 format
             dateFormat = new SimpleDateFormat("yyyy-MM");
         else // Chart 의 x축이 될 문자열 format
-            dateFormat = new SimpleDateFormat("MM");
+            dateFormat = new SimpleDateFormat("M");
         String todayString = dateFormat.format(todayDate);
 
         if(day == 0)
