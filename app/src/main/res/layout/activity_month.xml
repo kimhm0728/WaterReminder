@@ -65,7 +65,7 @@
                 android:layout_weight="50"
                 android:fontFamily="@font/nanumsquareextrabold"
                 android:gravity="center|top"
-                android:text="0mL"
+                android:text="0L"
                 android:textColor="#ffffff"
                 android:textSize="20sp" />
 
@@ -90,7 +90,7 @@
                 android:layout_weight="50"
                 android:fontFamily="@font/nanumsquareextrabold"
                 android:gravity="center_horizontal"
-                android:text="일일 평균 섭취량"
+                android:text="월 평균 섭취량"
                 android:textColor="#ffffff"
                 android:textSize="16sp" />
 
@@ -101,7 +101,7 @@
                 android:layout_weight="50"
                 android:fontFamily="@font/nanumsquareextrabold"
                 android:gravity="center|top"
-                android:text="0mL"
+                android:text="0L"
                 android:textColor="#ffffff"
                 android:textSize="20sp" />
         </LinearLayout>
