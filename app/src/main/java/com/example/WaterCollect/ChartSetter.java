@@ -39,7 +39,7 @@ public class ChartSetter {
             }
             else {
                 date = DateFormatter.monthString(i, 1);
-                days[i] = Integer.toString(Integer.parseInt(DateFormatter.monthString(i, 2)));
+                days[i] = DateFormatter.monthString(i, 2);
                 connectString = "monthquery";
             }
             try {
@@ -62,7 +62,7 @@ public class ChartSetter {
         barDataSet.setValueFormatter(new MyValueFormatter());
         barDataSet.setColor(Color.parseColor("#99ffffff"));
         barDataSet.setValueTextColor(Color.WHITE);
-        barDataSet.setValueTextSize(13f);
+        barDataSet.setValueTextSize(10f);
 
         BarData barData = new BarData(); // 차트에 담길 데이터
         barData.addDataSet(barDataSet);
@@ -70,6 +70,7 @@ public class ChartSetter {
         barChart.setData(barData);
         barChart.setFitBars(true);
         barChart.animateY(1000);
+        barChart.setDrawBorders(false);
         barChart.setTouchEnabled(false); // 차트 터치 막기
         barChart.setDrawValueAboveBar(true); // 값이 차트 위or아래에 그려질 건지
         barChart.setPinchZoom(false); // 두손가락으로 줌 설정
@@ -79,9 +80,12 @@ public class ChartSetter {
 
         XAxis xAxis = barChart.getXAxis();
         xAxis.setValueFormatter(new GraphAxisValueFormatter(days));
-        xAxis.setLabelCount(type+2, true);
+        xAxis.setGranularityEnabled(true);
+        xAxis.setGranularity(1f);
+        xAxis.setLabelCount(type+2, false);
         xAxis.setTextColor(Color.WHITE);
-        xAxis.setGridColor(Color.WHITE);
+        xAxis.setGridColor(Color.parseColor("#4Dffffff"));
+        xAxis.setAxisLineColor(Color.parseColor("#4Dffffff"));
 
         YAxis yAxisLeft = barChart.getAxisLeft(); // Y축의 왼쪽면 설정
         yAxisLeft.setTextColor(Color.WHITE);
