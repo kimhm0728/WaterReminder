@@ -36,7 +36,6 @@ public class WeekActivity extends Fragment {
 
         barChart.invalidate(); // 차트 업데이트
         return v;
-
     }
 }
 
