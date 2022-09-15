@@ -16,8 +16,11 @@ import java.util.Locale;
 public class InputActivity extends AppCompatActivity {
     private TextView text;
     private String weight;
+    private int pickerDefault = 0;
     private NumberPicker weight_picker;
     private ImageButton xBtn;
+    private static final String inputKey = "input";
+    private static final String pickerKey = "picker";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class InputActivity extends AppCompatActivity {
         weight_picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldValue, int newValue) {
+                pickerDefault = newValue;
                 weight = Integer.toString(newValue);
                 String day = StringChanger.decimalComma(newValue*30);
 
@@ -65,20 +69,19 @@ public class InputActivity extends AppCompatActivity {
     }
 
     protected void saveState(){
-        SharedPreferences pref=getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString("weightinput", text.getText().toString() );
+        editor.putString(inputKey, text.getText().toString());
+        editor.putInt(pickerKey, pickerDefault);
 
         editor.commit();
         }
 
-
     protected void restoreState() {
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
-        if ((pref != null) && (pref.contains("weightinput"))) {
-            String weightinput = pref.getString("weightinput", "");
-            text.setText(weightinput);
-
+        if ((pref != null) && (pref.contains(inputKey))) {
+            text.setText(pref.getString(inputKey, "몸무게를 입력하여\n하루 권장량을 확인하세요"));
+            weight_picker.setValue(pref.getInt(pickerKey, 0));
         }
     }
 
