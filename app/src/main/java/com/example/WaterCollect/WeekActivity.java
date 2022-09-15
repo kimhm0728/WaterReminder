@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
 
 import java.util.Locale;
 
@@ -31,6 +32,7 @@ public class WeekActivity extends Fragment {
 
         ChartSetter chartSetter = new ChartSetter(7);
         barChart = chartSetter.barChartSet(barChart);
+
         sum.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(chartSetter.getSum())));
         average.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(chartSetter.getAvg())));
 

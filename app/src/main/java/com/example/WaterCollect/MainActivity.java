@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+
 
         IntakeResetter.resetAlarm(this);
         windowSet();
@@ -383,6 +385,7 @@ public class MainActivity extends AppCompatActivity {
                 day_water.setText(String.format("아래의 블루투스 버튼을"));
                 day_text.setText("클릭하여 장치와 연결해주세요");
                 break;
+
             case 3:
                 if (weight == 0) {
                     day_water.setTextSize(Dimension.SP, 13);
