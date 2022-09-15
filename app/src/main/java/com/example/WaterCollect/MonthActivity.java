@@ -15,7 +15,6 @@ import com.github.mikephil.charting.charts.BarChart;
 import java.util.Locale;
 
 public class MonthActivity extends Fragment {
-
     private BarChart barChart;
     private TextView sum;
     private TextView average;

@@ -34,7 +34,6 @@ class DataInserter extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(@NonNull String... params) {
-
         String device = (String)params[1];;
         String intake;
         String date;

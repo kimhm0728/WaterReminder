@@ -10,7 +10,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 
 public class StatActivity extends AppCompatActivity {
-
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private FragmentAdapter adapter;

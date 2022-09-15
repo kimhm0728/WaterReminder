@@ -11,12 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.data.BarData;
 
 import java.util.Locale;
 
 public class WeekActivity extends Fragment {
-
     private BarChart barChart;
     private TextView sum;
     private TextView average;

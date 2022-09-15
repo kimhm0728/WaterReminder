@@ -8,19 +8,16 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Locale;
 
 public class InputActivity extends AppCompatActivity {
-
     private TextView text;
     private String weight;
     private NumberPicker weight_picker;
     private ImageButton xBtn;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +30,6 @@ public class InputActivity extends AppCompatActivity {
         weight_picker.setMaxValue(200);
         weight_picker.setMinValue(0);
         weight_picker.setValue(0);
-
-
 
         weight_picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
@@ -60,14 +55,12 @@ public class InputActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
-        Toast.makeText(this, "", Toast.LENGTH_LONG).show();
         saveState();
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        Toast.makeText(this, "", Toast.LENGTH_LONG).show();
         restoreState();
     }
 

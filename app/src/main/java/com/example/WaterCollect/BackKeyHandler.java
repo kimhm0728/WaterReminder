@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.widget.Toast;
 
 public class BackKeyHandler {
-
     private long backKeyPressedTime = 0;
     private Activity activity;
     private Toast toast;
