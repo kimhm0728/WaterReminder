@@ -1,6 +1,5 @@
 package com.example.WaterCollect;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -24,7 +23,6 @@ import java.util.Calendar;
 
 
 public class SetActivity extends AppCompatActivity {
-
     private ImageView alarmImage;
     private ImageView aiImage;
     private TextView alarmText;
@@ -139,11 +137,6 @@ public class SetActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-
-
-
 
     }
 
