@@ -2,6 +2,7 @@ package com.example.WaterCollect;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -10,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private static int day = 0; // 하루 권장 섭취량
     private static int ratio = 0; // 권장량 달성비율
     private static int weight = 0;
+    private static final String weightKey = "weight";
 
     private static final int REQUEST_ENABLE_BT = 10; // 블루투스 활성화 상태
     private BluetoothAdapter bluetoothAdapter; // 블루투스 어댑터
@@ -406,10 +409,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart(){
+        super.onStart();
+        saveState();
+    }
+
+    /*
+    @Override
+    protected void onPause(){
+        super.onPause();
+        saveState();
+    }
+    */
+
+    protected void saveState(){
+        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(weightKey, weight);
+        Log.e("test11", Integer.toString(weight));
+
+        editor.commit();
+        Log.e("test1", Integer.toString(weight));
+    }
+
+    @Override
     protected void onDestroy() {
+        super.onDestroy();
         // Activity 소멸 시 호출
         unregisterReceiver(mBluetoothStateReceiver);
-        super.onDestroy();
+        restoreState();
+    }
+
+    protected void restoreState() {
+        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        if ((pref != null) && (pref.contains(weightKey))) {
+            weight = pref.getInt(weightKey, 0);
+            Log.e("test2", Integer.toString(weight));
+        }
     }
 
 }
