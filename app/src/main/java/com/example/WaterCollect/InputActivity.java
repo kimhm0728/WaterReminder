@@ -2,11 +2,13 @@ package com.example.WaterCollect;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +21,7 @@ public class InputActivity extends AppCompatActivity {
     private NumberPicker weight_picker;
     private ImageButton xBtn;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +33,8 @@ public class InputActivity extends AppCompatActivity {
         weight_picker.setMaxValue(200);
         weight_picker.setMinValue(0);
         weight_picker.setValue(0);
+
+
 
         weight_picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
@@ -50,6 +55,38 @@ public class InputActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        Toast.makeText(this, "", Toast.LENGTH_LONG).show();
+        saveState();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Toast.makeText(this, "", Toast.LENGTH_LONG).show();
+        restoreState();
+    }
+
+    protected void saveState(){
+        SharedPreferences pref=getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("weightinput", text.getText().toString() );
+
+        editor.commit();
+        }
+
+
+    protected void restoreState() {
+        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        if ((pref != null) && (pref.contains("weightinput"))) {
+            String weightinput = pref.getString("weightinput", "");
+            text.setText(weightinput);
+
+        }
     }
 
     @Override
