@@ -18,7 +18,6 @@ public class ChartSetter {
     private int intakeSum = 0;
     private String[] days;
     private int type; // 주, 월을 구분
-    private static int todayIntake = 0;
 
     // MySQL 에서 섭취량을 가져오는 생성자
     public ChartSetter(int type) {
@@ -45,8 +44,6 @@ public class ChartSetter {
             try {
                 result = task[0].execute("http://" + MainActivity.IP_ADDRESS + "/" + connectString + ".php", MainActivity.device, date, "receive").get();
                 intake = Integer.parseInt(result);
-                if(i == 0 && type == 7)
-                    todayIntake = intake;
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
@@ -110,6 +107,4 @@ public class ChartSetter {
         return intakeSum;
     }
     public int getAvg() { return (int)((double)intakeSum/type); }
-
-    public static int getTodayIntake() { return todayIntake; }
 }
