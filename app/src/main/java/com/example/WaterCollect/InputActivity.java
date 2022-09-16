@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
@@ -15,7 +16,7 @@ import java.util.Locale;
 
 public class InputActivity extends AppCompatActivity {
     private TextView text;
-    private String weight;
+    private static String weight;
     private int pickerDefault = 0;
     private NumberPicker weight_picker;
     private ImageButton xBtn;
@@ -32,7 +33,7 @@ public class InputActivity extends AppCompatActivity {
         xBtn = findViewById(R.id.x_btn);
         weight_picker.setMaxValue(200);
         weight_picker.setMinValue(0);
-        weight_picker.setValue(0);
+        weight_picker.setValue(pickerDefault);
 
         weight_picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
@@ -41,7 +42,10 @@ public class InputActivity extends AppCompatActivity {
                 weight = Integer.toString(newValue);
                 String day = StringChanger.decimalComma(newValue*30);
 
-                text.setText(String.format(Locale.KOREA,"하루 권장량은 %smL입니다.", day));
+                if(pickerDefault > 0)
+                    text.setText(String.format(Locale.KOREA,"하루 권장량은 %smL입니다.", day));
+                else
+                    text.setText("몸무게를 입력하여\n하루 권장량을 확인하세요");
             }
         });
 
@@ -74,6 +78,7 @@ public class InputActivity extends AppCompatActivity {
         editor.putString(inputKey, text.getText().toString());
         editor.putInt(pickerKey, pickerDefault);
 
+        Log.e("save", Integer.toString(pickerDefault));
         editor.commit();
         }
 
@@ -81,7 +86,9 @@ public class InputActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         if ((pref != null) && (pref.contains(inputKey))) {
             text.setText(pref.getString(inputKey, "몸무게를 입력하여\n하루 권장량을 확인하세요"));
-            weight_picker.setValue(pref.getInt(pickerKey, 0));
+            pickerDefault = pref.getInt(pickerKey, 0);
+            weight_picker.setValue(pickerDefault);
+            Log.e("restore", Integer.toString(pickerDefault));
         }
     }
 

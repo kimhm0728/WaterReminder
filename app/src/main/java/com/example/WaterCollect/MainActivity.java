@@ -36,11 +36,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
     private final BackKeyHandler backKeyHandler = new BackKeyHandler(this);
 
+    private Intent mIntent;
     private TextView day_water;
     private TextView total_text;
     private TextView day_text;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     public static int waterSum = 0; // 총 섭취량
     private static int day = 0; // 하루 권장 섭취량
     private static int ratio = 0; // 권장량 달성비율
-    private static int weight = 0;
+    private static int weight;
     private static final String weightKey = "weight";
 
     private static final int REQUEST_ENABLE_BT = 10; // 블루투스 활성화 상태
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private byte[] readBuffer; //수신된 문자열 저장 버퍼
     private int readBufferPosition; //버퍼  내 문자 저장 위치
     private int pairedDeviceCount;  //페어링 된 기기의 크기를 지정할 변수
-    private int bluetoothCheck = 3;
+    private int bluetoothCheck;
     // 0: 블루투스 미지원 1: 블루투스 off 2: 블루투스 on, 연결필요 3: 연결완료
 
     public final static String IP_ADDRESS = "192.168.45.134";
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //startService(new Intent(this, BluetoothServices.class));
 
         day_water = findViewById(R.id.dayText);
         total_text = findViewById(R.id.water);
@@ -128,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-
 
         IntakeResetter.resetAlarm(this);
         windowSet();
@@ -189,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else { } // 액티비티에서 받은 값이 없는 경우
         windowSet();
+        saveState();
     }
 
     // 블루투스 상태 변화에 따른 리시버
@@ -230,8 +232,6 @@ public class MainActivity extends AppCompatActivity {
         pairedDeviceCount = devices.size();
         //페어링 된 장치가 없는 경우
         if (pairedDeviceCount == 0) {
-            bluetoothCheck = 2;
-            windowSet();
             //페어링 하기 위한 함수 호출
             Toast.makeText(getApplicationContext(), "페어링 되어있는 장치가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
         }
@@ -256,7 +256,6 @@ public class MainActivity extends AppCompatActivity {
             builder.setItems(charSequences, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    bluetoothCheck = 3;
                     //해당 디바이스와 연결하는 함수 호출
                     connectDevice(charSequences[which].toString());
                 }
@@ -276,6 +275,12 @@ public class MainActivity extends AppCompatActivity {
         if(deviceName.equals("닫기"))
             return;
 
+        mIntent=  new Intent(getApplicationContext(), BluetoothServices.class);
+        mIntent.putExtra("bluetooth_device",deviceName);
+        startService(mIntent);
+
+        /*
+
         //페어링 된 디바이스 모두 탐색
         for (BluetoothDevice tempDevice : devices) {
             //사용자가 선택한 이름과 같은 디바이스로 설정하고 반복문 종료
@@ -285,6 +290,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+
         Toast.makeText(getApplicationContext(), bluetoothDevice.getName() + " 연결 완료", Toast.LENGTH_SHORT).show();
         //UUID생성
         UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
@@ -301,8 +307,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
 
-        device_text.setText(bluetoothDevice.getName());
+        //device_text.setText(bluetoothDevice.getName());
     }
 
     public void receiveData() {
@@ -372,7 +379,17 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() { backKeyHandler.onBackPressed(); }
 
     public void windowSet() {
-        total_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(ChartSetter.getTodayIntake())));
+        final DataInserter task = new DataInserter();
+        day = weight * 30;
+
+        try {
+            task.execute("http://" + MainActivity.IP_ADDRESS + "/weekquery.php", device, DateFormatter.weekString(0, 1), "receive");
+            waterSum = Integer.parseInt(task.get());
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        total_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(waterSum)));
 
         switch(bluetoothCheck) {
             case 1:
@@ -394,57 +411,49 @@ public class MainActivity extends AppCompatActivity {
                     day_text.setTextSize(Dimension.SP, 13);
                     day_water.setText(String.format("몸무게를"));
                     day_text.setText("입력해주세요");
+                    percent.setText("0%");
+                    ratio_pBar.setProgress(0);
+                    return;
                 } else {
                     day_water.setTextSize(Dimension.SP, 14);
                     day_text.setTextSize(Dimension.SP, 16);
                     day_water.setText(String.format("하루 권장량"));
-                    ratio = (int) (((double) ChartSetter.getTodayIntake() / day) * 100); // 권장량 달성비율
-                    percent.setText(String.format(Locale.KOREA, "%d%%", Math.min(ratio, 100)));
                     day_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(day)));
                 }
                 break;
         }
-        left_text.setText(String.format(Locale.KOREA, "%smL", (day - ChartSetter.getTodayIntake() < 0) ? 0 : StringChanger.decimalComma(day - ChartSetter.getTodayIntake())));
+        ratio = (int) (((double) waterSum / day) * 100); // 권장량 달성비율
+        percent.setText(String.format(Locale.KOREA, "%d%%", Math.min(ratio, 100)));
+        left_text.setText(String.format(Locale.KOREA, "%smL", (day - waterSum < 0) ? 0 : StringChanger.decimalComma(day - waterSum)));
         ratio_pBar.setProgress(ratio); // 하루 권장량 달성비율만큼 progressBar에 적용
     }
+
 
     @Override
     protected void onStart(){
         super.onStart();
-        saveState();
-    }
-
-    /*
-    @Override
-    protected void onPause(){
-        super.onPause();
-        saveState();
-    }
-    */
-
-    protected void saveState(){
-        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(weightKey, weight);
-        Log.e("test11", Integer.toString(weight));
-
-        editor.commit();
-        Log.e("test1", Integer.toString(weight));
+        restoreState();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Activity 소멸 시 호출
         unregisterReceiver(mBluetoothStateReceiver);
-        restoreState();
+    }
+
+    protected void saveState(){
+        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(weightKey, weight);
+
+        editor.commit();
     }
 
     protected void restoreState() {
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         if ((pref != null) && (pref.contains(weightKey))) {
             weight = pref.getInt(weightKey, 0);
-            Log.e("test2", Integer.toString(weight));
+            windowSet();
         }
     }
 
