@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
@@ -20,8 +19,6 @@ public class InputActivity extends AppCompatActivity {
     private int pickerDefault = 0;
     private NumberPicker weight_picker;
     private ImageButton xBtn;
-    private static final String inputKey = "input";
-    private static final String pickerKey = "picker";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,20 +72,18 @@ public class InputActivity extends AppCompatActivity {
     protected void saveState(){
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString(inputKey, text.getText().toString());
-        editor.putInt(pickerKey, pickerDefault);
+        editor.putString("input", text.getText().toString());
+        editor.putInt("picker", pickerDefault);
 
-        Log.e("save", Integer.toString(pickerDefault));
         editor.commit();
-        }
+    }
 
     protected void restoreState() {
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
-        if ((pref != null) && (pref.contains(inputKey))) {
-            text.setText(pref.getString(inputKey, "몸무게를 입력하여\n하루 권장량을 확인하세요"));
-            pickerDefault = pref.getInt(pickerKey, 0);
+        if (pref != null) {
+            text.setText(pref.getString("input", "몸무게를 입력하여\n하루 권장량을 확인하세요"));
+            pickerDefault = pref.getInt("picker", 0);
             weight_picker.setValue(pickerDefault);
-            Log.e("restore", Integer.toString(pickerDefault));
         }
     }
 

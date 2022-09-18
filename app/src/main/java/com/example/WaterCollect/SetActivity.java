@@ -30,8 +30,6 @@ public class SetActivity extends AppCompatActivity {
     private Switch aiSwitch;
     private ImageButton xBtn;
     private SharedPreferences sharedPreferences;
-    private static final String alarmKey = "alarm";
-    private static final String aiKey = "ai";
 
     private PackageManager pm;
     private ComponentName receiver;
@@ -60,8 +58,8 @@ public class SetActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("", MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
-        alarmSwitch.setChecked(sharedPreferences.getBoolean(alarmKey,false));
-        aiSwitch.setChecked(sharedPreferences.getBoolean(aiKey, false));
+        alarmSwitch.setChecked(sharedPreferences.getBoolean("alarm",false));
+        aiSwitch.setChecked(sharedPreferences.getBoolean("ai", false));
 
         //스위치 클릭 이벤트
         alarmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -71,7 +69,7 @@ public class SetActivity extends AppCompatActivity {
                     Toast.makeText(SetActivity.this, "알림이 설정되었습니다.", Toast.LENGTH_SHORT).show();
                     alarmImage.setImageResource(R.drawable.on);
                     alarmText.setText("정기 알림 on");
-                    editor.putBoolean(alarmKey,true);
+                    editor.putBoolean("alarm",true);
 
                     // 현재 지정된 시간으로 알람 시간 설정
                     Calendar calendar = Calendar.getInstance();
@@ -91,7 +89,7 @@ public class SetActivity extends AppCompatActivity {
                     Toast.makeText(SetActivity.this, "알림이 해제되었습니다.", Toast.LENGTH_SHORT).show();
                     alarmImage.setImageResource(R.drawable.off);
                     alarmText.setText("정기 알림 off");
-                    editor.putBoolean(alarmKey,false);
+                    editor.putBoolean("alarm",false);
 
                     // 모든 알림 삭제
                     if (PendingIntent.getBroadcast(SetActivity.this, 0, alarmIntent, 0) != null && alarmManager != null) {
@@ -114,7 +112,7 @@ public class SetActivity extends AppCompatActivity {
                     Toast.makeText(SetActivity.this, "알림이 설정되었습니다.", Toast.LENGTH_SHORT).show();
                     aiImage.setImageResource(R.drawable.on);
                     aiText.setText("인공지능 알림 on");
-                    editor.putBoolean(aiKey,true);
+                    editor.putBoolean("ai",true);
 
                     // 인공지능 관련 기능 추가
                 }
@@ -122,7 +120,7 @@ public class SetActivity extends AppCompatActivity {
                     Toast.makeText(SetActivity.this, "알림이 해제되었습니다.", Toast.LENGTH_SHORT).show();
                     aiImage.setImageResource(R.drawable.off);
                     aiText.setText("인공지능 알림 off");
-                    editor.putBoolean(aiKey,false);
+                    editor.putBoolean("ai",false);
 
                     // 인공지능 관련 기능 해제
                 }
@@ -143,7 +141,6 @@ public class SetActivity extends AppCompatActivity {
     void diaryNotification(Calendar calendar) {
 
         if (alarmManager != null) {
-
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                     AlarmManager.INTERVAL_DAY, pendingIntent);
 
