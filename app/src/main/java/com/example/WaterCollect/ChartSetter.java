@@ -42,7 +42,7 @@ public class ChartSetter {
                 connectString = "monthquery";
             }
             try {
-                result = task[0].execute("http://" + MainActivity.IP_ADDRESS + "/" + connectString + ".php", MainActivity.device, date, "receive").get();
+                result = task[0].execute("http://" + MainActivity.getIpAddress() + "/" + connectString + ".php", MainActivity.getDeviceNumber(), date, "receive").get();
                 intake = Integer.parseInt(result);
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
