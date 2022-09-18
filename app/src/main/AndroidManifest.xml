@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.WaterCollect">
 
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <!--    위치 권한-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
 
     <application
         android:usesCleartextTraffic="true"
@@ -28,6 +29,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project"
         tools:targetApi="31">
+
+        <service android:name=".BluetoothServices"
+            android:enabled="true"
+            android:exported="true"> </service>
 
         <activity
             android:name=".IntroActivity"
@@ -79,8 +84,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <service android:name=".BluetoothServices" />
 
         <receiver android:name=".AlarmReceiver" />
         <receiver android:name=".IntakeReceiver" />
