@@ -52,7 +52,7 @@ public class BluetoothServices extends Service {
 
     @Override
     public void onCreate(){
-        Toast.makeText(this, "The new Service was Created", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "연결을 완료했습니다.", Toast.LENGTH_LONG).show();
     }
 
     private final IBinder mBinder = new LocalBinder();
@@ -112,13 +112,14 @@ public class BluetoothServices extends Service {
     @SuppressLint("MissingPermission")
     public synchronized void stop(){
         setState(STATE_NONE);
+        if (mConnectedThread != null){
+            mConnectedThread.interrupt();
+            mConnectedThread.cancel();
+            mConnectedThread = null;
+        }
         if (mConnectThread != null){
             mConnectThread.cancel();
             mConnectThread = null;
-        }
-        if (mConnectedThread != null){
-            mConnectedThread.cancel();
-            mConnectedThread = null;
         }
         if (mBluetoothAdapter != null){
             mBluetoothAdapter.cancelDiscovery();
@@ -136,7 +137,6 @@ public class BluetoothServices extends Service {
             mConnectThread.cancel();
             mConnectThread = null;
         }
-
         if (mConnectedThread != null) {
             mConnectedThread.cancel();
             mConnectedThread = null;
@@ -228,7 +228,8 @@ public class BluetoothServices extends Service {
 
         @Override
         public void run() {
-            while (!Thread.currentThread().isInterrupted()) {
+            while(!Thread.currentThread().isInterrupted()) {
+                if(interrupted()) break;
                 try {
                     int byteAvailable = inS.available();
                     if (byteAvailable > 0) {
@@ -264,6 +265,7 @@ public class BluetoothServices extends Service {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                    break;
                 }
             }
             try {
@@ -275,18 +277,19 @@ public class BluetoothServices extends Service {
             Log.d("service","connected thread run method");
         }
 
-        private void cancel(){
+        private void cancel() {
             try {
                 cSocket.close();
                 Log.d("service","connected thread cancel method");
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
     }
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "장치와의 연결이 끊어졌습니다.", Toast.LENGTH_LONG).show();
+        stop();
     }
 }
