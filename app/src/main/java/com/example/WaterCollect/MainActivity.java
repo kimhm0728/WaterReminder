@@ -48,21 +48,27 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton stat_btn;
     private ImageButton setting_btn;
 
-    public static int waterSum = 0; // 총 섭취량
-    private static int day = 0; // 하루 권장 섭취량
-    private static int ratio = 0; // 권장량 달성비율
+    public static int waterSum = 0; //총 섭취량
+    private static int day = 0; //하루 권장 섭취량
+    private static int ratio = 0; //권장량 달성비율
     private static int weight;
 
-    private static final int REQUEST_ENABLE_BT = 10; // 블루투스 활성화 상태
-    private BluetoothAdapter bluetoothAdapter; // 블루투스 어댑터
-    private Set<BluetoothDevice> devices; // 블루투스 디바이스 데이터 셋
+    private static final int REQUEST_ENABLE_BT = 10; //블루투스 활성화 상태
+    private BluetoothAdapter bluetoothAdapter; //블루투스 어댑터
+    private Set<BluetoothDevice> devices; //블루투스 디바이스 데이터 셋
     private int pairedDeviceCount;  //페어링 된 기기의 크기를 지정할 변수
-    private int bluetoothCheck;
-    // 0: 블루투스 미지원 1: 블루투스 off 2: 블루투스 on, 연결필요 3: 연결완료
+    private String connectedDevice = null; //연결되어 있는 장치명
+
+    //블루투스 상태 변수
+    private static final int NOT_SUPPORT = 0;
+    private static final int BLUETOOTH_OFF = 1;
+    private static final int NOT_CONNECT = 2;
+    private static final int CONNECTING = 3;
+    private int mBTState;
 
     private final static String IP_ADDRESS = "192.168.45.134";
-    // 에뮬레이터 10.0.2.2, 안드로이드 192.168.45.134
-    private static String deviceNumber; // 디바이스 시리얼 넘버 SSAID
+    //에뮬레이터 10.0.2.2, 안드로이드 192.168.45.134
+    private static String deviceNumber; //디바이스 시리얼 넘버 SSAID
 
     @SuppressLint("MissingPermission")
     @Override
@@ -89,19 +95,27 @@ public class MainActivity extends AppCompatActivity {
         //블루투스 활성화 코드
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); //블루투스 어댑터를 디폴트 어댑터로 설정
 
+        //이미 페어링 되어있는 블루투스 기기를 탐색
+        devices = bluetoothAdapter.getBondedDevices();
+        pairedDeviceCount = devices.size();
+
         if (bluetoothAdapter == null) { //기기가 블루투스를 지원하지 않을때
-            bluetoothCheck = 0;
-            Toast.makeText(getApplicationContext(), "Bluetooth 미지원 기기입니다.", Toast.LENGTH_SHORT).show();
-        } else { // 기기가 블루투스를 지원할 때
+            setBTState(NOT_SUPPORT);
+        } else { //기기가 블루투스를 지원할 때
             if (bluetoothAdapter.isEnabled()) { //기기의 블루투스 기능이 켜져있을 경우
-                bluetoothCheck = 2;
+                connectedDevice = BluetoothChecker.PairingBluetoothListState(devices);
+                if(!TextUtils.isEmpty(connectedDevice))
+                    setBTState(CONNECTING);
+                else
+                    setBTState(NOT_CONNECT);
             } else { //기기의 블루투스 기능이 꺼져있을 경우
-                bluetoothCheck = 1;
+                setBTState(BLUETOOTH_OFF);
                 //사용자에게 활성화 요청
                 Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(intent, REQUEST_ENABLE_BT);
             }
         }
+        setDeviceText();
 
         IntakeResetter.resetAlarm(this);
         windowSet();
@@ -109,15 +123,15 @@ public class MainActivity extends AppCompatActivity {
         bluetooth_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (bluetoothCheck) {
-                    case 0:
+                switch (mBTState) {
+                    case NOT_SUPPORT:
                         Toast.makeText(getApplicationContext(), "Bluetooth 미지원 기기입니다.", Toast.LENGTH_SHORT).show();
                         break;
-                    case 1:
+                    case BLUETOOTH_OFF:
                         Toast.makeText(getApplicationContext(), "휴대폰의 Bluetooth 기능을 켠 후 연결할 장치를 선택해주세요.", Toast.LENGTH_SHORT).show();
                         break;
-                    case 2:
-                    case 3:
+                    case NOT_CONNECT:
+                    case CONNECTING:
                         selectBluetoothDevice();
                         break;
                 }
@@ -176,23 +190,22 @@ public class MainActivity extends AppCompatActivity {
                     final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
                     switch(state) {
                         case BluetoothAdapter.STATE_OFF: //블루투스 비활성화
-                            bluetoothCheck = 1;
+                            setBTState(BLUETOOTH_OFF);
                             break;
                         case BluetoothAdapter.STATE_ON: //블루투스 활성화
-                            bluetoothCheck = 2;
+                            setBTState(NOT_CONNECT);
                             break;
                     }
                     break;
                 case BluetoothDevice.ACTION_ACL_CONNECTED:  //블루투스 기기 연결
-                    bluetoothCheck = 3;
-                    //device_text.setText(bluetoothDevice.getName());
+                    setBTState(CONNECTING);
                     break;
                 case BluetoothDevice.ACTION_ACL_DISCONNECTED:   //블루투스 기기 끊어짐
-                    bluetoothCheck = 2;
+                    setBTState(NOT_CONNECT);
                     stopService(mIntent);
                     break;
             }
-            windowSet();
+            setDeviceText();
         }
     };
 
@@ -207,13 +220,8 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("MissingPermission")
     public void selectBluetoothDevice() {
-        //이미 페어링 되어있는 블루투스 기기를 탐색
-        devices = bluetoothAdapter.getBondedDevices();
-        pairedDeviceCount = devices.size();
-
-        if (pairedDeviceCount == 0) { //페어링 된 장치가 없는 경우
+        if (pairedDeviceCount == 0)  //페어링 된 장치가 없는 경우
             Toast.makeText(getApplicationContext(), "페어링 되어있는 장치가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
-        }
         else { //페어링 되어있는 장치가 있는 경우
             //디바이스를 선택하기 위한 대화상자 생성
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -237,9 +245,24 @@ public class MainActivity extends AppCompatActivity {
                     if(deviceName.equals("닫기"))
                         return;
 
+                    for (BluetoothDevice bluetoothDevice : devices)
+                        if (BluetoothChecker.isConnected(bluetoothDevice)) { // 이미 연결중인 장치가 있다면
+                            if(bluetoothDevice.getName().equals(deviceName)) {
+                                // 연결중인 장치가 현재 연결하려는 장치와 같다면 메소드 빠져나옴
+                                Toast.makeText(getApplicationContext(), "이미 연결되어 있는 장치입니다.", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            else {
+                                stopService(mIntent); // 끊고 다시 연결
+                                break;
+                            }
+                        }
+
                     mIntent.putExtra("bluetooth_device", deviceName);
                     startService(mIntent);
-                    //device_text.setText(bluetoothDevice.getName());
+                    setBTState(CONNECTING);
+                    connectedDevice = deviceName;
+                    setDeviceText();
                 }
             });
             //뒤로가기 버튼 누를때 창이 안닫히도록 설정
@@ -255,6 +278,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() { backKeyHandler.onBackPressed(); }
 
+    private void setDeviceText() {
+        switch (mBTState) {
+            case NOT_SUPPORT:
+                device_text.setText("블루투스 미지원 기기입니다");
+                break;
+            case BLUETOOTH_OFF:
+                device_text.setText("블루투스 기능을 켜주세요");
+                break;
+            case CONNECTING:
+                device_text.setText(connectedDevice);
+                break;
+            case NOT_CONNECT:
+                device_text.setText("블루투스 버튼을 눌러 장치와 연결해주세요");
+        }
+    }
     public void windowSet() {
         final DataInserter task = new DataInserter();
         day = weight * 30;
@@ -268,37 +306,21 @@ public class MainActivity extends AppCompatActivity {
 
         total_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(waterSum)));
 
-        switch(bluetoothCheck) {
-            case 1:
-                day_water.setTextSize(Dimension.SP, 13);
-                day_text.setTextSize(Dimension.SP, 13);
-                day_water.setText(String.format("블루투스 기능을"));
-                day_text.setText("켜주세요");
-                break;
-            case 2:
-                day_water.setTextSize(Dimension.SP, 10);
-                day_text.setTextSize(Dimension.SP, 10);
-                day_water.setText(String.format("아래의 블루투스 버튼을"));
-                day_text.setText("클릭하여 장치와 연결해주세요");
-                break;
-            case 0:
-            case 3:
-                if (weight == 0) {
-                    day_water.setTextSize(Dimension.SP, 13);
-                    day_text.setTextSize(Dimension.SP, 13);
-                    day_water.setText(String.format("몸무게를"));
-                    day_text.setText("입력해주세요");
-                    percent.setText("0%");
-                    ratio_pBar.setProgress(0);
-                    return;
-                } else {
-                    day_water.setTextSize(Dimension.SP, 14);
-                    day_text.setTextSize(Dimension.SP, 16);
-                    day_water.setText(String.format("하루 권장량"));
-                    day_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(day)));
-                }
-                break;
+        if (weight == 0) {
+            day_water.setTextSize(Dimension.SP, 13);
+            day_text.setTextSize(Dimension.SP, 13);
+            day_water.setText(String.format("몸무게를"));
+            day_text.setText("입력해주세요");
+            percent.setText("0%");
+            ratio_pBar.setProgress(0);
+            return;
+        } else {
+            day_water.setTextSize(Dimension.SP, 14);
+            day_text.setTextSize(Dimension.SP, 16);
+            day_water.setText(String.format("하루 권장량"));
+            day_text.setText(String.format(Locale.KOREA, "%smL", StringChanger.decimalComma(day)));
         }
+
         ratio = (int) (((double) waterSum / day) * 100); //권장량 달성비율
         percent.setText(String.format(Locale.KOREA, "%d%%", Math.min(ratio, 100)));
         left_text.setText(String.format(Locale.KOREA, "%smL", (day - waterSum < 0) ? 0 : StringChanger.decimalComma(day - waterSum)));
@@ -309,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static String getDeviceNumber() { return deviceNumber; }
 
+    private void setBTState(int state) { mBTState = state; }
     @Override
     protected void onStart() {
         super.onStart();
