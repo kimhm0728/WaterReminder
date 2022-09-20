@@ -254,7 +254,7 @@ public class BluetoothServices extends Service {
                                         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("RECEIVED_DATA"));
                                         // 받은 센서 값을 서버에 전송
                                         task[0] = new DataInserter();
-                                        task[0].execute("http://" + MainActivity.getIpAddress() + "/insert.php", MainActivity.getDeviceNumber(), water, "send");
+                                        task[0].execute("http://" + MainActivity.getIpAddress() + "/insert.php", IntroActivity.getEmail(), water, "send");
                                     }
                                 });
                             } // 개행문자가 아닐경우

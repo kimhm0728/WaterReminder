@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
@@ -68,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
     private final static String IP_ADDRESS = "192.168.45.134";
     //에뮬레이터 10.0.2.2, 안드로이드 192.168.45.134
-    private static String deviceNumber; //디바이스 시리얼 넘버 SSAID
 
     @SuppressLint("MissingPermission")
     @Override
@@ -87,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
         input_btn = findViewById(R.id.input_btn);
         stat_btn = findViewById(R.id.statistics_btn);
         setting_btn = findViewById(R.id.setting_btn);
-
-        deviceNumber = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
         mIntent = new Intent(getApplicationContext(), BluetoothServices.class);
 
@@ -298,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
         day = weight * 30;
 
         try {
-            task.execute("http://" + MainActivity.IP_ADDRESS + "/weekquery.php", deviceNumber, DateFormatter.weekString(0, 1), "receive");
+            task.execute("http://" + MainActivity.IP_ADDRESS + "/weekquery.php", IntroActivity.getEmail(), DateFormatter.weekString(0, 1), "receive");
             waterSum = Integer.parseInt(task.get());
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -328,8 +324,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static String getIpAddress() { return IP_ADDRESS; }
-
-    public static String getDeviceNumber() { return deviceNumber; }
 
     private void setBTState(int state) { mBTState = state; }
     @Override
