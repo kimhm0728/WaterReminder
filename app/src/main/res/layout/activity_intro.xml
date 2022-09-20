@@ -16,7 +16,7 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="25" />
+            android:layout_weight="20" />
 
         <ImageView
             android:id="@+id/image"
@@ -35,7 +35,7 @@
             android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="45"
+            android:layout_weight="10"
             android:fontFamily="@font/nobilebold"
             android:text="WaterCollect"
             android:textAlignment="center"
@@ -45,6 +45,63 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10">
+
+            <ImageButton
+                android:id="@+id/login"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#00ff0000"
+                android:visibility="gone"
+                app:srcCompat="@drawable/kakao_login"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <ImageButton
+                android:id="@+id/logout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#00ff0000"
+                app:srcCompat="@drawable/kakao_logout"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+        </FrameLayout>
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+            <ImageView
+                android:id="@+id/profile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="35"
+                android:gravity="center_vertical|right" />
+
+            <TextView
+                android:id="@+id/nickname"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="65"
+                android:fontFamily="@font/nanumsquareextrabold"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:textColor="#ffffff"
+                android:textSize="15dp" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

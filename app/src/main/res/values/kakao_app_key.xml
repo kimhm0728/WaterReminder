@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="kakao_app_key">aaa</string>
+    <string name="kakao_app_key">watercollect</string>
     <string name="kakao_native_key">fa6f68defe4a244b03d7b2a9c3495900</string>
+    <string name="kakao_native_key2">kakaofa6f68defe4a244b03d7b2a9c3495900</string>
 </resources>
