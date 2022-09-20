@@ -50,4 +50,16 @@ public class DateFormatter {
             return dateFormat.format(cal.getTime());
         }
     }
+
+    // yyyy-MM-dd HH:mm:ss
+    @NonNull
+    public static String nowDateString() {
+        Date todayDate = new Date();
+        SimpleDateFormat dateFormat;
+
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String todayString = dateFormat.format(todayDate);
+
+        return todayString;
+    }
 }
