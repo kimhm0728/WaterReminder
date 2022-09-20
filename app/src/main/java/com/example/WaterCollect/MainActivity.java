@@ -347,6 +347,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //사용자의 최근 방문 날짜를 MySQL에 보냄
+        VisitDateInserter task = new VisitDateInserter();
+        task.execute("http://" + MainActivity.IP_ADDRESS + "/date.php", IntroActivity.getEmail(), DateFormatter.nowDateString());
         unregisterReceiver(mBluetoothStateReceiver);
         LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mBluetoothDataReceiver);
     }
