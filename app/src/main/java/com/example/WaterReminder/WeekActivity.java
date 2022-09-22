@@ -1,4 +1,4 @@
-package com.example.WaterCollect;
+package com.example.WaterReminder;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -38,16 +38,3 @@ public class WeekActivity extends Fragment {
         return v;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,4 +1,4 @@
-package com.example.WaterCollect;
+package com.example.WaterReminder;
 
 import android.graphics.Color;
 
@@ -107,4 +107,5 @@ public class ChartSetter {
         return intakeSum;
     }
     public int getAvg() { return (int)((double)intakeSum/type); }
+
 }

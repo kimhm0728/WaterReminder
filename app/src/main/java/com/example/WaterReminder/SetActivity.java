@@ -1,4 +1,4 @@
-package com.example.WaterCollect;
+package com.example.WaterReminder;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -21,7 +21,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Calendar;
-import java.util.concurrent.ExecutionException;
 
 public class SetActivity extends AppCompatActivity {
     private ImageView alarmImage;
@@ -31,7 +30,7 @@ public class SetActivity extends AppCompatActivity {
     private Switch alarmSwitch;
     private Switch aiSwitch;
     private ImageButton xBtn;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences pref;
 
     private PackageManager pm;
     private ComponentName receiver;
@@ -66,10 +65,13 @@ public class SetActivity extends AppCompatActivity {
         aiSwitch = (Switch) findViewById(R.id.aiSwitch);
         xBtn = (ImageButton) findViewById(R.id.x_btn);
 
-        sharedPreferences = getSharedPreferences("", MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
-        alarmSwitch.setChecked(sharedPreferences.getBoolean("alarm",false));
-        aiSwitch.setChecked(sharedPreferences.getBoolean("ai", false));
+        pref = getSharedPreferences("", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = pref.edit();
+        alarmSwitch.setChecked(pref.getBoolean("alarm",false));
+        aiSwitch.setChecked(pref.getBoolean("ai", false));
+
+        alarmText.setText(pref.getString("alarmString", "정기 알림 off"));
+        aiText.setText(pref.getString("aiString", "인공지능 알림 off"));
 
         //스위치 클릭 이벤트
         alarmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -80,6 +82,7 @@ public class SetActivity extends AppCompatActivity {
                     alarmImage.setImageResource(R.drawable.on);
                     alarmText.setText("정기 알림 on");
                     editor.putBoolean("alarm",true);
+                    editor.putString("alarmString", alarmText.getText().toString());
 
                     // 현재 지정된 시간으로 알람 시간 설정
                     Calendar calendar = Calendar.getInstance();
@@ -100,6 +103,7 @@ public class SetActivity extends AppCompatActivity {
                     alarmImage.setImageResource(R.drawable.off);
                     alarmText.setText("정기 알림 off");
                     editor.putBoolean("alarm",false);
+                    editor.putString("alarmString", alarmText.getText().toString());
 
                     // 모든 알림 삭제
                     if (PendingIntent.getBroadcast(SetActivity.this, 0, alarmIntent, 0) != null && alarmManager != null) {
@@ -123,16 +127,19 @@ public class SetActivity extends AppCompatActivity {
                     aiImage.setImageResource(R.drawable.on);
                     aiText.setText("인공지능 알림 on");
                     editor.putBoolean("ai",true);
+                    editor.putString("aiString", aiText.getText().toString());
 
                     // 인공지능 관련 기능 추가
                     AccountInserter task = new AccountInserter(); // 오류나면 따로 http 통신 클래스 만들기
                     String date = null;
+                    /*
                     try {
                         // 값을받아올때까지대기해야함 .. 그리고 값받아오면 또 task.. thread or handler!! 센서값 전송하는코드참고
-                        date = task.execute("http://" + MainActivity.getIpAddress() + "/count.php", IntroActivity.getEmail()).get();
+                        date = task.execute("http://" + MainActivity.getIpAddress() + "/ai.php", IntroActivity.getEmail(), null, null, null).get();
                     } catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
                     }
+                    */
                     if(!TextUtils.isEmpty(date))
                         AiDiaryNotification(DateFormatter.stringToCalender(date));
                 }
@@ -141,6 +148,7 @@ public class SetActivity extends AppCompatActivity {
                     aiImage.setImageResource(R.drawable.off);
                     aiText.setText("인공지능 알림 off");
                     editor.putBoolean("ai",false);
+                    editor.putString("aiString", aiText.getText().toString());
 
                     // 스레드 종료부분..
                     // 모든 알림 삭제

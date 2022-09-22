@@ -1,4 +1,4 @@
-package com.example.WaterCollect;
+package com.example.WaterReminder;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
@@ -24,7 +24,7 @@ public class BluetoothChecker {
         for (BluetoothDevice bluetoothDevice : devices) {
             if (isConnected(bluetoothDevice))
                 return bluetoothDevice.getName();
-            }
+        }
         return null;
     }
 }

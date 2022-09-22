@@ -1,7 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/java,android,androidstudio,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,android,androidstudio,windows
 
-/app/src/main/res/values/api_secret_key.xml
+/app/src/main/res/values/kakao_app_key.xml
 ### Android ###
 # Gradle files
 .gradle/
@@ -212,4 +212,3 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/java,android,androidstudio,windows
-
