@@ -14,10 +14,10 @@
 
         // 안드로이드 코드의 postParameters 변수에 적어준 이름을 가지고 값을 전달
 
-        $device=$_POST['device'];
+        $email=$_POST['email'];
         $date=$_POST['date'];
 
-        if(empty($device)){
+        if(empty($email)){
             $errMSG = "기기명을 입력하세요.";
         }
         else if(empty($date)){
@@ -25,7 +25,7 @@
         }
 
         if(!isset($errMSG)) { // 모두 입력이 되었다면 
-			$sql="SELECT SUM(intake) as sum FROM water WHERE device = '$device' AND DATE(waterdate) = DATE('$date')";
+			$sql="SELECT SUM(intake) as sum FROM water WHERE email = '$email' AND intake_date BETWEEN '$date-01 00:00:00' AND '$date-31 23:59:59'";
 			$stmt = $con->prepare($sql);
 			$stmt->execute();
  
@@ -66,7 +66,7 @@
        <body>
 
             <form action="<?php $_PHP_SELF ?>" method="POST">
-                Device: <input type = "text" name = "device" />
+                email: <input type = "text" name = "email" />
                 date: <input type = "text" name = "date" />
                 <input type = "submit" name = "submit" />
             </form>
