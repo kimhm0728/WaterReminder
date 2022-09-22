@@ -68,7 +68,7 @@ $number = $array["cnt"];
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WaterCollect 일간 분석</title>
+    <title>WaterReminder 일간 분석</title>
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
 	</style>
@@ -78,10 +78,10 @@ $number = $array["cnt"];
 </head>
 
 <header>
-	<h1>WaterCollect 관리자 페이지</h1>
+	<h1>WaterReminder 관리자 페이지</h1>
 		<p>'<?php echo $s_name; ?>'님, 안녕하세요.</p>
 	<nav>
-		<span><a href="/watercollect/index.php" class="bar q">홈으로</a></span>
+		<span><a href="/waterreminder/index.php" class="bar q">홈으로</a></span>
 		<span><a href="../members/my_edit.php" class="bar q">내 정보 수정</a></span>
 		<span><a href="../login/logout.php" class="q">로그아웃</a></span>
 	</nav>

@@ -5,7 +5,7 @@ include "../inc/admin_session.php";
 include "../inc/dbcon.php";
 
 /* 쿼리 작성 */
-$sql = "select * from users where del_yn = 'N';";
+$sql = "select * from admin;";
 
 /* 쿼리 전송 */
 $result = mysqli_query($dbcon, $sql);
@@ -56,14 +56,14 @@ if($e_pageNum > $total_page){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WaterCollect 사용자 목록</title>
+    <title>WaterReminder 관리자 계정 목록</title>
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
 	</style>
     <link rel="stylesheet" href="../css/table.css">
-    <link rel="stylesheet" href="../css/menu.css">
 	<link rel="stylesheet" href="../css/main.css">
-    <style type="text/css">
+	<link rel="stylesheet" href="../css/menu.css">
+	<style type="text/css">
 		table a{text-decoration:none;color:#000;border:1px solid #333;display:inline-block;padding:3px 5px;font-size:12px;border-radius:5px}
     </style>
     <script type="text/javascript">
@@ -72,17 +72,17 @@ if($e_pageNum > $total_page){
 
             if(i == true){
                 // alert("delete.php?u_idx="+idx);
-                location.href = "user_delete.php?u_idx="+idx;
+                location.href = "admin_delete.php?u_idx="+idx;
             };
         };
     </script>
 </head>
 
 <header>
-	<h1>WaterCollect 관리자 페이지</h1>
+	<h1>WaterReminder 관리자 페이지</h1>
 		<p>'<?php echo $s_name; ?>'님, 안녕하세요.</p>
 	<nav>
-		<span><a href="/watercollect/index.php" class="bar q">홈으로</a></span>
+		<span><a href="/waterreminder/index.php" class="bar q">홈으로</a></span>
 		<span><a href="my_edit.php" class="bar q">내 정보 수정</a></span>
 		<span><a href="../login/logout.php" class="q">로그아웃</a></span>
 	</nav>
@@ -108,16 +108,17 @@ if($e_pageNum > $total_page){
         </li>  
     </ul>
 </div>
-<div style="float:right; margin-top:15px; margin-right:347px;">
-    <p style="margin-bottom:5px;">사용자 총 <?php echo $num; ?>명</p>
+<div style="float:right; margin-top:15px; margin-right:244px;">
+    <p style="margin-bottom:5px;">관리자 총 <?php echo $num; ?>명</p>
     <table>
         <tr class="title">
             <td>번호</td>
-            <td>이메일</td>
             <td>이름</td>
-            <td>성별</td>
-            <td>나이</td>
-            <td>최근 접속 일자</td>
+            <td>아이디</td>
+			<td>이메일</td>
+            <td>전화번호</td>
+            <td>가입일</td>
+            <td>수정</td>
             <td>삭제</td>
         </tr>
 
@@ -130,7 +131,7 @@ if($e_pageNum > $total_page){
         $start = ($page - 1) * $list_num;
 
         /* paging : 쿼리 작성 - limit 몇번부터, 몇개 */
-        $sql = "select * from users where del_yn = 'N' limit $start, $list_num;";
+        $sql = "select * from admin limit $start, $list_num;";
 
         /* paging : 쿼리 전송 */
         $result = mysqli_query($dbcon, $sql);
@@ -144,11 +145,12 @@ if($e_pageNum > $total_page){
         <tr class="brd">
             <!-- <td><?php echo $i; ?></td> -->
             <td><?php echo $cnt; ?></td>
-            <td><?php echo $array["email"]; ?></td>
-            <td><?php echo $array["nickname"]; ?></td>
-            <td><?php echo $array["gender"]; ?></td>
-            <td><?php echo $array["age"]; ?></td>
-            <td><?php echo $array["recent_visit"]; ?></td>
+            <td><?php echo $array["name"]; ?></td>
+            <td><?php echo $array["id"]; ?></td>
+			<td><?php echo $array["email"]; ?></td>
+            <td><?php echo $array["mobile"]; ?></td>
+            <td><?php echo $array["reg_date"]; ?></td>
+            <td><a href="edit.php?u_idx=<?php echo $array["idx"]; ?>">수정하기</a></td>
             <td><a href="#" onclick="del_check(<?php echo $array["idx"]; ?>)">삭제하기</a></td>
         </tr>
         <?php  
@@ -158,31 +160,31 @@ if($e_pageNum > $total_page){
         }; 
         ?>
     </table>
-    <p class="pager" style="margin-top:10px">
+    <p class="pager"; style="margin-top:10px">
 
     <?php
     /* paging : 이전 페이지 */
     if($page <= 1){
     ?>
-    <a href="user.php?page=1">이전</a>
+    <a href="admin.php?page=1">이전</a>
     <?php } else{ ?>
-    <a href="user.php?page=<?php echo ($page-1); ?>">이전</a>
+    <a href="admin.php?page=<?php echo ($page-1); ?>">이전</a>
     <?php };?>
 
     <?php
     /* pager : 페이지 번호 출력 */
     for($print_page = $s_pageNum; $print_page <= $e_pageNum; $print_page++){
     ?>
-    <a href="user.php?page=<?php echo $print_page; ?>"><?php echo $print_page; ?></a>
+    <a href="admin.php?page=<?php echo $print_page; ?>"><?php echo $print_page; ?></a>
     <?php };?>
 
     <?php
     /* paging : 다음 페이지 */
     if($page >= $total_page){
     ?>
-    <a href="user.php?page=<?php echo $total_page; ?>">다음</a>
+    <a href="admin.php?page=<?php echo $total_page; ?>">다음</a>
     <?php } else{ ?>
-    <a href="user.php?page=<?php echo ($page+1); ?>">다음</a>
+    <a href="admin.php?page=<?php echo ($page+1); ?>">다음</a>
     <?php };?>
 
     </p>

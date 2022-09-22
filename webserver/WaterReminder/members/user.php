@@ -5,8 +5,7 @@ include "../inc/admin_session.php";
 include "../inc/dbcon.php";
 
 /* 쿼리 작성 */
-$sql = "SELECT email
-		FROM users";
+$sql = "select * from users where del_yn = 'N';";
 
 /* 쿼리 전송 */
 $result = mysqli_query($dbcon, $sql);
@@ -57,21 +56,34 @@ if($e_pageNum > $total_page){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WaterCollect 사용자 방문 순위</title>
+    <title>WaterReminder 사용자 목록</title>
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
 	</style>
     <link rel="stylesheet" href="../css/table.css">
+    <link rel="stylesheet" href="../css/menu.css">
 	<link rel="stylesheet" href="../css/main.css">
-	<link rel="stylesheet" href="../css/menu.css">
+    <style type="text/css">
+		table a{text-decoration:none;color:#000;border:1px solid #333;display:inline-block;padding:3px 5px;font-size:12px;border-radius:5px}
+    </style>
+    <script type="text/javascript">
+        function del_check(idx){
+            var i = confirm("정말 삭제하시겠습니까?\n삭제한 아이디는 복원하실 수 없습니다.");
+
+            if(i == true){
+                // alert("delete.php?u_idx="+idx);
+                location.href = "user_delete.php?u_idx="+idx;
+            };
+        };
+    </script>
 </head>
 
 <header>
-	<h1>WaterCollect 관리자 페이지</h1>
+	<h1>WaterReminder 관리자 페이지</h1>
 		<p>'<?php echo $s_name; ?>'님, 안녕하세요.</p>
 	<nav>
-		<span><a href="/watercollect/index.php" class="bar q">홈으로</a></span>
-		<span><a href="../members/my_edit.php" class="bar q">내 정보 수정</a></span>
+		<span><a href="/waterreminder/index.php" class="bar q">홈으로</a></span>
+		<span><a href="my_edit.php" class="bar q">내 정보 수정</a></span>
 		<span><a href="../login/logout.php" class="q">로그아웃</a></span>
 	</nav>
 </header>
@@ -82,21 +94,21 @@ if($e_pageNum > $total_page){
         <li class="group">
             <div class="menutitle">계정 관리</div>
             <ul class="sub">
-                <li><a href="../members/user.php">전체 사용자</a></li>
-                <li><a href="../members/admin.php">관리자</a></li>
+                <li><a href="user.php">전체 사용자</a></li>
+                <li><a href="admin.php">관리자</a></li>
             </ul>
         </li>
         <li class="group">
             <div class="menutitle">인사이트 분석</div>
             <ul class="sub">
-                <li><a href="today_visit.php">일간 분석</a></li>
-                <li><a href="week_visit.php">주간 분석</a></li>    
-                <li><a href="users_rank.php">사용자 방문 순위</a></li>    				
+                <li><a href="../stat/today_visit.php">일간 분석</a></li>
+                <li><a href="../stat/week_visit.php">주간 분석</a></li>    
+                <li><a href="../stat/users_rank.php">사용자 방문 순위</a></li>    				
             </ul>
         </li>  
     </ul>
 </div>
-<div style="float:right; margin-top:15px; margin-right:359.5px;">
+<div style="float:right; margin-top:15px; margin-right:347px;">
     <p style="margin-bottom:5px;">사용자 총 <?php echo $num; ?>명</p>
     <table>
         <tr class="title">
@@ -106,7 +118,7 @@ if($e_pageNum > $total_page){
             <td>성별</td>
             <td>나이</td>
             <td>최근 접속 일자</td>
-            <td>방문 수</td>
+            <td>삭제</td>
         </tr>
 
         <?php
@@ -118,22 +130,7 @@ if($e_pageNum > $total_page){
         $start = ($page - 1) * $list_num;
 
         /* paging : 쿼리 작성 - limit 몇번부터, 몇개 */
-        $sql = "SELECT a.idx, a.email, a.nickname, a.gender, a.age, 
-				a.recent_visit, IFNULL( b.cnt, 0 ) AS cnt
-				FROM (
-				SELECT *
-				FROM users
-				WHERE del_yn = 'N'
-				)a
-				LEFT JOIN (
-				SELECT u.email as email, COUNT( visit_date ) AS cnt
-				FROM users u, visit v
-				WHERE u.del_yn = 'N'
-				AND u.email = v.email
-				GROUP BY email
-				)b ON a.email = b.email
-				ORDER BY cnt DESC
-				limit $start, $list_num;";
+        $sql = "select * from users where del_yn = 'N' limit $start, $list_num;";
 
         /* paging : 쿼리 전송 */
         $result = mysqli_query($dbcon, $sql);
@@ -152,7 +149,7 @@ if($e_pageNum > $total_page){
             <td><?php echo $array["gender"]; ?></td>
             <td><?php echo $array["age"]; ?></td>
             <td><?php echo $array["recent_visit"]; ?></td>
-            <td><?php echo $array["cnt"]; ?></td>
+            <td><a href="#" onclick="del_check(<?php echo $array["idx"]; ?>)">삭제하기</a></td>
         </tr>
         <?php  
             /* $i++; */
@@ -167,25 +164,25 @@ if($e_pageNum > $total_page){
     /* paging : 이전 페이지 */
     if($page <= 1){
     ?>
-    <a href="users_rank.php?page=1">이전</a>
+    <a href="user.php?page=1">이전</a>
     <?php } else{ ?>
-    <a href="users_rank.php?page=<?php echo ($page-1); ?>">이전</a>
+    <a href="user.php?page=<?php echo ($page-1); ?>">이전</a>
     <?php };?>
 
     <?php
     /* pager : 페이지 번호 출력 */
     for($print_page = $s_pageNum; $print_page <= $e_pageNum; $print_page++){
     ?>
-    <a href="users_rank.php?page=<?php echo $print_page; ?>"><?php echo $print_page; ?></a>
+    <a href="user.php?page=<?php echo $print_page; ?>"><?php echo $print_page; ?></a>
     <?php };?>
 
     <?php
     /* paging : 다음 페이지 */
     if($page >= $total_page){
     ?>
-    <a href="users_rank.php?page=<?php echo $total_page; ?>">다음</a>
+    <a href="user.php?page=<?php echo $total_page; ?>">다음</a>
     <?php } else{ ?>
-    <a href="users_rank.php?page=<?php echo ($page+1); ?>">다음</a>
+    <a href="user.php?page=<?php echo ($page+1); ?>">다음</a>
     <?php };?>
 
     </p>

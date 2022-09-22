@@ -1,14 +1,14 @@
 <?php
-include "../inc/admin_session.php";
+session_start();
 
-/* 클릭한 사용자 정보 가져오기 */
-$u_idx = $_GET["u_idx"];
+/* 로그인 사용자 */
+$s_idx = $_SESSION["s_idx"];
 
 /* DB 연결 */
 include "../inc/dbcon.php";
 
 /* 쿼리 작성 */
-$sql = "select * from admin where idx=$u_idx;";
+$sql = "select * from admin where idx=$s_idx;";
 
 /* 쿼리 전송 */
 $result = mysqli_query($dbcon, $sql);
@@ -23,13 +23,13 @@ $array = mysqli_fetch_array($result);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WaterCollect 관리자 정보 수정</title>
+    <title>WaterReminder 내 정보 수정</title>
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
 	</style>
 	<link rel="stylesheet" href="../css/main.css">
-	<link rel="stylesheet" href="../css/edit.css">
 	<link rel="stylesheet" href="../css/menu.css">
+	<link rel="stylesheet" href="../css/edit.css">
     <script type="text/javascript">
         function edit_check(){
             
@@ -91,10 +91,10 @@ $array = mysqli_fetch_array($result);
 </head>
 
 <header>
-	<h1>WaterCollect 관리자 페이지</h1>
-		<p>'<?php echo $s_name; ?>'님, 안녕하세요.</p>
+	<h1>WaterReminder 관리자 페이지</h1>
+		<p>'<?php echo $array["u_name"]; ?>'님, 안녕하세요.</p>
 	<nav>
-		<span><a href="/watercollect/index.php" class="bar q">홈으로</a></span>
+		<span><a href="/waterreminder/index.php" class="bar q">홈으로</a></span>
 		<span><a href="my_edit.php" class="bar q">내 정보 수정</a></span>
 		<span><a href="../login/logout.php" class="q">로그아웃</a></span>
 	</nav>
@@ -123,7 +123,7 @@ $array = mysqli_fetch_array($result);
 <div style="float:right; margin-top:15px; margin-right:300px;">
     <form name="edit_form" action="edit_ok.php" method="post" onsubmit="return edit_check()">
         <fieldset>
-            <legend>관리자 정보 수정</legend>
+            <legend>내 정보 수정</legend>
             <input type="hidden" name="u_idx" value="<?php echo $u_idx; ?>">
             <p>
                 <div class="txt">이름</div>
@@ -175,7 +175,7 @@ $array = mysqli_fetch_array($result);
             <p class="btn_wrap" style="margin-top: 20px;">
                 <button type="button" class="btn" onclick="history.back()">이전으로</button>
                 <button type="button" class="btn" onclick="location.href='../index.php'">홈으로</button>
-                <button type="button" class="btn" onclick="del_check()">관리자삭제</button>
+                <button type="button" class="btn" onclick="del_check()">탈퇴</button>
                 <button type="submit" class="btn">정보수정</button>
             </p>
         </fieldset>
