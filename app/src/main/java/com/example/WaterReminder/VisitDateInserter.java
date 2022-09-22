@@ -1,4 +1,4 @@
-package com.example.WaterCollect;
+package com.example.WaterReminder;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -11,9 +11,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 // post 방식으로 php->MySQL 데이터 전송
-class AccountInserter extends AsyncTask<String, Void, String> {
+class VisitDateInserter extends AsyncTask<String, Void, String> {
     private final static String TAG = "phptest";
 
     @Override
@@ -31,14 +32,12 @@ class AccountInserter extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(@NonNull String... params) {
         String email = (String)params[1];
-        String nickname = (String)params[2];
-        String gender = (String)params[3];
-        String age = (String)params[4];
+        String date = (String)params[2];
         String postParameters;
 
         String serverURL = (String)params[0];
 
-        postParameters = "email=" + email + "&nickname=" + nickname + "&gender=" + gender + "&age=" + age;
+        postParameters = "email=" + email + "&date=" + date;
 
         try {
 
@@ -51,7 +50,7 @@ class AccountInserter extends AsyncTask<String, Void, String> {
             httpURLConnection.connect();
 
             OutputStream outputStream = httpURLConnection.getOutputStream();
-            outputStream.write(postParameters.getBytes("UTF-8"));
+            outputStream.write(postParameters.getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
             outputStream.close();
 
@@ -66,7 +65,7 @@ class AccountInserter extends AsyncTask<String, Void, String> {
                 inputStream = httpURLConnection.getErrorStream();
             }
 
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
             StringBuilder sb = new StringBuilder();

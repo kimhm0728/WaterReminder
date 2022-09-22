@@ -1,4 +1,4 @@
-package com.example.WaterCollect;
+package com.example.WaterReminder;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -11,14 +11,18 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 // post 방식으로 php->MySQL 데이터 전송
-class VisitDateInserter extends AsyncTask<String, Void, String> {
+class DataInserter extends AsyncTask<String, Void, String> {
     private final static String TAG = "phptest";
+    boolean check; // true: send, false: receive
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
     }
 
     @Override
@@ -26,17 +30,28 @@ class VisitDateInserter extends AsyncTask<String, Void, String> {
         super.onPostExecute(result);
 
         Log.d(TAG, "POST response  - " + result);
+
     }
 
     @Override
     protected String doInBackground(@NonNull String... params) {
         String email = (String)params[1];
-        String date = (String)params[2];
+        String intake;
+        String date;
         String postParameters;
 
         String serverURL = (String)params[0];
 
-        postParameters = "email=" + email + "&date=" + date;
+        if(Objects.equals((String) params[3], "send")) {
+            check = true;
+            intake = (String)params[2];
+            postParameters = "email=" + email + "&intake=" + intake;
+        }
+        else  { // receive
+            check = false;
+            date = (String)params[2];
+            postParameters = "email=" + email + "&date=" + date;
+        }
 
         try {
 
@@ -46,10 +61,12 @@ class VisitDateInserter extends AsyncTask<String, Void, String> {
             httpURLConnection.setReadTimeout(5000);
             httpURLConnection.setConnectTimeout(5000);
             httpURLConnection.setRequestMethod("POST");
+            if(!check)
+                httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
 
             OutputStream outputStream = httpURLConnection.getOutputStream();
-            outputStream.write(postParameters.getBytes("UTF-8"));
+            outputStream.write(postParameters.getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
             outputStream.close();
 
@@ -64,7 +81,7 @@ class VisitDateInserter extends AsyncTask<String, Void, String> {
                 inputStream = httpURLConnection.getErrorStream();
             }
 
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
             StringBuilder sb = new StringBuilder();

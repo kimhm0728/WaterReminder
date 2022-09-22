@@ -1,4 +1,4 @@
-package com.example.WaterCollect;
+package com.example.WaterReminder;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

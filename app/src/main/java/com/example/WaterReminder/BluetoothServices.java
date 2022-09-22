@@ -1,4 +1,4 @@
-package com.example.WaterCollect;
+package com.example.WaterReminder;
 
 import android.annotation.SuppressLint;
 import android.app.Service;

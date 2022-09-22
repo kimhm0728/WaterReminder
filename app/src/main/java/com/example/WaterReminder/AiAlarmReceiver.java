@@ -1,4 +1,4 @@
-package com.example.WaterCollect;
+package com.example.WaterReminder;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,7 +13,7 @@ import androidx.core.app.NotificationCompat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AlarmReceiver extends BroadcastReceiver {
+public class AiAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(@NonNull Context context, Intent intent) {
 
@@ -53,7 +53,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         builder.setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                .setContentTitle("물 마시는 거 잊지 마세요!")
+                .setContentTitle("평소보다 물을 적게 마셨어요!")
                 .setContentInfo("INFO")
                 .setContentIntent(pendingI);
 

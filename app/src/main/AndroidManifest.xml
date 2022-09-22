@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.WaterCollect">
+    package="com.example.WaterReminder">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -29,14 +29,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project"
         tools:targetApi="31"
-        android:name=".KakaoApplication">
+        android:name="com.example.WaterReminder.KakaoApplication">
 
-        <service android:name=".BluetoothServices"
+        <service android:name="com.example.WaterReminder.BluetoothServices"
             android:enabled="true"
             android:exported="true"> </service>
 
         <activity
-            android:name=".IntroActivity"
+            android:name="com.example.WaterReminder.IntroActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,29 +46,29 @@
         </activity>
 
         <activity
-            android:name="com.example.WaterCollect.InputActivity"
+            android:name="com.example.WaterReminder.InputActivity"
             android:exported="true" />
 
         <activity
-            android:name="com.example.WaterCollect.MainActivity"
+            android:name="com.example.WaterReminder.MainActivity"
             android:exported="true"/>
 
         <activity
-            android:name="com.example.WaterCollect.StatActivity"
+            android:name="com.example.WaterReminder.StatActivity"
             android:exported="true" />
 
         <activity
-            android:name="com.example.WaterCollect.WeekActivity"
+            android:name="com.example.WaterReminder.WeekActivity"
             android:exported="true"
             tools:ignore="Instantiatable" />
 
         <activity
-            android:name="com.example.WaterCollect.MonthActivity"
+            android:name="com.example.WaterReminder.MonthActivity"
             android:exported="true"
             tools:ignore="Instantiatable" />
         
             <activity
-                android:name="com.example.WaterCollect.SetActivity"
+                android:name="com.example.WaterReminder.SetActivity"
                 android:exported="true" >
 
                 <intent-filter>
@@ -78,7 +78,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".DeviceBootReceiver"
+        <receiver android:name="com.example.WaterReminder.DeviceBootReceiver"
             android:exported="true"
             android:enabled="false">
             <intent-filter>
@@ -86,8 +86,17 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".AlarmReceiver" />
-        <receiver android:name=".IntakeReceiver" />
+        <receiver android:name="com.example.WaterReminder.AiDeviceBootReceiver"
+            android:exported="true"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.example.WaterReminder.AlarmReceiver" />
+        <receiver android:name="com.example.WaterReminder.AiAlarmReceiver" />
+        <receiver android:name="com.example.WaterReminder.IntakeReceiver" />
 
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
