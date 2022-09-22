@@ -1,7 +1,7 @@
 <?php
 
     $host = 'localhost';
-    $username = 'root'; # MySQL 계정 아이디
+    $username = 'connectuser'; # MySQL 계정 아이디
     $password = 'gpals780@'; # MySQL 계정 패스워드
     $dbname = 'watercollect';  # DATABASE 이름
     

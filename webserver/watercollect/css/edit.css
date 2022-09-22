@@ -1,0 +1,103 @@
+input{
+	border:1px solid #999;
+	font-size:14px;
+	padding:5px 10px;
+	font-family: 'Nanum Gothic', sans-serif;
+}
+
+input,button,select,option{
+	vertical-align:middle
+}
+
+form{
+	width:750px
+}
+
+input[type=checkbox]{
+	width:20px;
+	height:20px
+}
+
+span{
+	font-size:14px;
+	color:#f00
+}
+
+fieldset {
+	border: 1px solid rgb(204, 204, 204);
+	padding: 25px;
+	margin: 0 10 0 10;
+	border-radius: 15px 15px 15px 15px;
+	font-family: 'Nanum Gothic', sans-serif;
+}
+
+legend {
+	font-size: 1.2em;
+	font-weight: bold;
+	text-align: center;
+	width:auto;
+	padding:0px 10px 0px 10px;
+	margin: 0;
+	border-bottom:none;
+	font-family: 'Nanum Gothic', sans-serif;
+}
+.top-right {
+position: absolute;
+top: 12px;
+right: 16px;
+}
+
+p span{
+	display:block;
+	margin-left:130px;
+}
+
+p {
+	margin-bottom:10px
+}
+
+button{
+	cursor:pointer
+}
+	
+.txt{
+	display:inline-block;
+	width:120px
+}
+
+.btn{
+	background:#8594b8;
+	font-size:14px;
+	color:white;
+	border:none;
+	border-radius:15px;
+	padding:10px 10px;
+	font-family: 'Nanum Gothic', sans-serif;
+}
+
+.btn_wrap{
+	text-align:center
+}
+
+.email_sel{
+	width:120px;
+	height:28px
+}
+
+.joinForm {
+  position:absolute;
+  width:400px;
+  height:400px;
+  padding: 30px, 20px;
+  background-color:#FFFFFF;
+  text-align:center;
+  top:40%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  border-radius: 15px;
+}
+
+.joinForm h2 {
+  text-align: center;
+  margin: 30px;
+}
