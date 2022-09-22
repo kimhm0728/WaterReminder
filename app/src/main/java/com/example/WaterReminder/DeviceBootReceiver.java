@@ -1,4 +1,4 @@
-package com.example.WaterCollect;
+package com.example.WaterReminder;
 
 import static android.content.Context.MODE_PRIVATE;
 

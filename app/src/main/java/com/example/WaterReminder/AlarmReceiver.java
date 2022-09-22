@@ -1,4 +1,4 @@
-package com.example.WaterCollect;
+package com.example.WaterReminder;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
