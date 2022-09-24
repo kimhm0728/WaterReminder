@@ -1,15 +1,12 @@
 package com.example.WaterReminder;
 
-import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -19,8 +16,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
+
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 public class SetActivity extends AppCompatActivity {
     private ImageView alarmImage;
@@ -37,10 +43,9 @@ public class SetActivity extends AppCompatActivity {
     private Intent alarmIntent;
     private PendingIntent pendingIntent;
 
-    private ComponentName aiReceiver;
-    private Intent aiAlarmIntent;
-    private AlarmManager alarmManager;
-    private PendingIntent aiPendingIntent;
+    private WorkManager workManager;
+    private WorkRequest aiWorkRequest;
+    private AlarmSetter alarmSetter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +56,6 @@ public class SetActivity extends AppCompatActivity {
         receiver = new ComponentName(this, DeviceBootReceiver.class);
         alarmIntent = new Intent(this, AlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        aiReceiver = new ComponentName(this, AiDeviceBootReceiver.class);
-        aiAlarmIntent = new Intent(this, AiAlarmReceiver.class);
-        aiPendingIntent = PendingIntent.getBroadcast(this, 0, aiAlarmIntent, 0);
 
         alarmImage = (ImageView) findViewById(R.id.alarmImage);
         alarmText = (TextView) findViewById(R.id.alarmText);
@@ -72,6 +72,9 @@ public class SetActivity extends AppCompatActivity {
 
         alarmText.setText(pref.getString("alarmString", "정기 알림 off"));
         aiText.setText(pref.getString("aiString", "인공지능 알림 off"));
+
+        workManager = WorkManager.getInstance(getApplicationContext());
+        alarmSetter = new AlarmSetter(getApplicationContext());
 
         //스위치 클릭 이벤트
         alarmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -96,7 +99,7 @@ public class SetActivity extends AppCompatActivity {
                         calendar.add(Calendar.DATE, 1);
                     }
 
-                    diaryNotification(calendar);
+                    alarmSetter.diaryNotification(calendar, pm, receiver, pendingIntent);
 
                 } else {
                     Toast.makeText(SetActivity.this, "알림이 해제되었습니다.", Toast.LENGTH_SHORT).show();
@@ -105,14 +108,7 @@ public class SetActivity extends AppCompatActivity {
                     editor.putBoolean("alarm",false);
                     editor.putString("alarmString", alarmText.getText().toString());
 
-                    // 모든 알림 삭제
-                    if (PendingIntent.getBroadcast(SetActivity.this, 0, alarmIntent, 0) != null && alarmManager != null) {
-                        alarmManager.cancel(pendingIntent);
-                        //Toast.makeText(this,"Notifications were disabled",Toast.LENGTH_SHORT).show();
-                    }
-                    pm.setComponentEnabledSetting(receiver,
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP);
+                    alarmSetter.stopNotification(SetActivity.this, pm, alarmIntent, receiver, pendingIntent);
                 }
                 editor.commit();
             }
@@ -129,19 +125,13 @@ public class SetActivity extends AppCompatActivity {
                     editor.putBoolean("ai",true);
                     editor.putString("aiString", aiText.getText().toString());
 
-                    // 인공지능 관련 기능 추가
-                    AccountInserter task = new AccountInserter(); // 오류나면 따로 http 통신 클래스 만들기
-                    String date = null;
-                    /*
-                    try {
-                        // 값을받아올때까지대기해야함 .. 그리고 값받아오면 또 task.. thread or handler!! 센서값 전송하는코드참고
-                        date = task.execute("http://" + MainActivity.getIpAddress() + "/ai.php", IntroActivity.getEmail(), null, null, null).get();
-                    } catch (ExecutionException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    */
-                    if(!TextUtils.isEmpty(date))
-                        AiDiaryNotification(DateFormatter.stringToCalender(date));
+                    aiWorkRequest =
+                            new PeriodicWorkRequest.Builder(AiWorker.class, 1, TimeUnit.HOURS)
+                                    .addTag("WORK_TAG")
+                                    .build();
+
+                    workManager.enqueue(aiWorkRequest);
+
                 }
                 else {
                     Toast.makeText(SetActivity.this, "알림이 해제되었습니다.", Toast.LENGTH_SHORT).show();
@@ -150,15 +140,14 @@ public class SetActivity extends AppCompatActivity {
                     editor.putBoolean("ai",false);
                     editor.putString("aiString", aiText.getText().toString());
 
-                    // 스레드 종료부분..
-                    // 모든 알림 삭제
-                    if (aiPendingIntent.getBroadcast(SetActivity.this, 0, aiAlarmIntent, 0) != null && alarmManager != null) {
-                        alarmManager.cancel(aiPendingIntent);
-                        //Toast.makeText(this,"Notifications were disabled",Toast.LENGTH_SHORT).show();
+                    if(isWorkScheduled("WORK_TAG")) {
+                        // 예정된 알림 해제 후 work cancel
+                        if(AiWorker.getContext() != null)
+                            alarmSetter.stopNotification(AiWorker.getContext(), AiWorker.getPm(),
+                                AiWorker.getAlarmIntent(), AiWorker.getReceiver(), AiWorker.getPendingIntent());
+                        workManager.cancelAllWorkByTag("WORK_TAG");
                     }
-                    pm.setComponentEnabledSetting(aiReceiver,
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP);
+
                 }
                 editor.commit();
             }
@@ -173,40 +162,25 @@ public class SetActivity extends AppCompatActivity {
 
     }
 
-    // 매일 특정 시간에 알림
-    void diaryNotification(Calendar calendar) {
-        if (alarmManager != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, pendingIntent);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    private boolean isWorkScheduled(String tag) {
+        WorkManager instance = WorkManager.getInstance(getApplicationContext());
+        ListenableFuture<List<WorkInfo>> statuses = instance.getWorkInfosByTag(tag);
+        try {
+            List<WorkInfo> workInfoList = statuses.get();
+            for (WorkInfo workInfo : workInfoList) {
+                WorkInfo.State state = workInfo.getState();
+                Log.d("work state", String.valueOf(state));
+                if(state == WorkInfo.State.RUNNING | state == WorkInfo.State.ENQUEUED)
+                    return true;
             }
+            return false;
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
         }
-
-        // 부팅 후 실행되는 리시버 사용가능하게 설정
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-
-    }
-
-    // ai를 통한 알림
-    void AiDiaryNotification(Calendar calendar) {
-        if (alarmManager != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, aiPendingIntent);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), aiPendingIntent);
-            }
-        }
-
-        // 부팅 후 실행되는 리시버 사용가능하게 설정
-        pm.setComponentEnabledSetting(aiReceiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-
     }
 
 }

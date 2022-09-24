@@ -149,10 +149,9 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onPause() {
+        super.onPause();
         //사용자의 최근 방문 날짜를 MySQL에 보냄
-        Log.e("on start", "test");
         VisitDateInserter task = new VisitDateInserter();
         task.execute("http://" + MainActivity.getIpAddress() + "/count.php", IntroActivity.getEmail(), DateFormatter.nowDateString());
     }
