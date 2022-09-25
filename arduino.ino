@@ -11,10 +11,10 @@ HX711 scale(DOUT, CLK);  // 엠프 핀 선언
 SoftwareSerial BTSerial(RX, TX); // serial 객체 생성 
 // 아두이노의 RX은 코드의 TX, 아두이노의 TX은 코드의 RX
 
-int LED1 = 12; // LED 핀 설정
-int LED2 = 13;
-long weightPre; // HX711 데이터 저장
-long weight;
+//int LED1 = 12; // LED 핀 설정
+//int LED2 = 13;
+float weightPre; // HX711 데이터 저장
+float weight;
 int water;
 
 void setup() {
@@ -27,32 +27,30 @@ void setup() {
   Serial.println("Readings:");
   
   // LED output 설정
-  pinMode(LED1, OUTPUT); 
-  pinMode(LED2, OUTPUT);
+  //pinMode(LED1, OUTPUT); 
+  //pinMode(LED2, OUTPUT);
 
   delay(1000);
 }
 
 void loop() {
   // HX711 값 읽음
-  weightPre = scale.get_units();
-  delay(60000);
-  weight = scale.get_units();
+  weightPre = scale.get_units() * 453.592; // lbs를 g으로 변경
+  delay(10000);
+  weight = scale.get_units() * 453.592;
   
-  if(weight < weightPre && weightPre - weight > 3) { 
+  if(weight < weightPre && weightPre - weight > 40) { 
     // 무게가 줄어든 경우 물을 섭취한 것이라고 판단
     water = weightPre - weight;
+    // String 변환
+    String waterStr = String((int)water);
+    Serial.println(waterStr);
+  
+    BTSerial.println(waterStr); // 블루투스에 데이터 전송
   }
-  else {
-    water = 0;
-    }
-  
-  // String 변환
-  String waterStr = String(water);
-  Serial.println(waterStr);
-  
-  BTSerial.println(waterStr); // 블루투스에 데이터 전송
-    
+
+
+  /*
   
   // HX711 데이터에 따라 led on/off 
   if(weight > 300){ // 무게가 300g 이상이면
@@ -66,4 +64,5 @@ void loop() {
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, LOW);
     }  
+  */
 }
