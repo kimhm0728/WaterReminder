@@ -1,5 +1,6 @@
 package com.example.WaterReminder;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -10,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int CONNECTING = 3;
     private int mBTState;
 
-    private final static String IP_ADDRESS = "192.168.45.134";
+    private final static String IP_ADDRESS = "192.168.45.250";
     //에뮬레이터 10.0.2.2, 안드로이드 192.168.45.134
 
     @SuppressLint("MissingPermission")
@@ -90,6 +92,26 @@ public class MainActivity extends AppCompatActivity {
 
         //블루투스 활성화 코드
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); //블루투스 어댑터를 디폴트 어댑터로 설정
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            requestPermissions(
+                    new String[]{
+                            Manifest.permission.BLUETOOTH,
+                            Manifest.permission.BLUETOOTH_SCAN,
+                            Manifest.permission.BLUETOOTH_ADVERTISE,
+                            Manifest.permission.BLUETOOTH_CONNECT
+
+
+                    },
+                    1);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(
+                    new String[]{
+                            Manifest.permission.BLUETOOTH
+
+                    },
+                    1);
+        }
 
         //이미 페어링 되어있는 블루투스 기기를 탐색
         devices = bluetoothAdapter.getBondedDevices();
