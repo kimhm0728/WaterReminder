@@ -37,7 +37,7 @@ public class AlarmSetter {
 
     public void stopNotification(Context context, PackageManager pm, Intent intent, ComponentName receiver, PendingIntent pendingIntent) {
         // 모든 알림 삭제
-        if (PendingIntent.getBroadcast(context, 0, intent, 0) != null && alarmManager != null) {
+        if (PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE) != null && alarmManager != null) {
             alarmManager.cancel(pendingIntent);
             //Toast.makeText(this,"Notifications were disabled",Toast.LENGTH_SHORT).show();
         }
