@@ -68,7 +68,6 @@ public class IntroActivity extends AppCompatActivity {
                 if (throwable != null) {
 
                 }
-                updateKakaoLoginUi();
                 return null;
             }
         };
@@ -115,9 +114,9 @@ public class IntroActivity extends AppCompatActivity {
                     age = age.substring(4, 6)+"대";
 
                     // 유저의 어카운트정보에 이메일
-                    Log.d(TAG, "invoke: nickname " + email);
+                    Log.d(TAG, "invoke: nickname " + nickname);
                     // 유저의 어카운트 정보의 프로파일에 닉네임
-                    Log.d(TAG, "invoke: email " + nickname);
+                    Log.d(TAG, "invoke: email " + email);
                     // 유저의 어카운트 파일의 성별
                     Log.d(TAG, "invoke: gerder " + gender);
                     // 유저의 어카운트 정보에 나이
