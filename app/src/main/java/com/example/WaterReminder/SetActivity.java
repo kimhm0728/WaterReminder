@@ -55,7 +55,7 @@ public class SetActivity extends AppCompatActivity {
         pm = this.getPackageManager();
         receiver = new ComponentName(this, DeviceBootReceiver.class);
         alarmIntent = new Intent(this, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE);
 
         alarmImage = (ImageView) findViewById(R.id.alarmImage);
         alarmText = (TextView) findViewById(R.id.alarmText);
