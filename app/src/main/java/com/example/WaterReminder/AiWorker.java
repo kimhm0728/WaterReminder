@@ -39,7 +39,7 @@ public class AiWorker extends Worker {
         pm = appContext.getPackageManager();
         receiver = new ComponentName(context, AiDeviceBootReceiver.class);
         alarmIntent = new Intent(context, AiAlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
+        pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE);
         alarmSetter = new AlarmSetter(appContext);
 
     }
